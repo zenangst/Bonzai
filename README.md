@@ -6,6 +6,7 @@ This repository houses a collection of SwiftUI styles designed for all applicati
 
 ### Components
 - [x] Menu Styles
+- [x] Button Styles
 
 ## Author
 

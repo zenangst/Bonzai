@@ -1,6 +1,6 @@
 import Cocoa
 
-public struct ZenConfiguration {
+public struct ZenStyleConfiguration {
   let cornerRadius: CGFloat
   let nsColor: NSColor
   let padding: Padding

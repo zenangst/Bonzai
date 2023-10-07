@@ -1,33 +1,22 @@
 import SwiftUI
 
-struct ZenMenuStyle: MenuStyle {
-  @Environment(\.colorScheme) var colorScheme
+struct ZenButtonStyle: ButtonStyle {
   @State private var isHovered: Bool
+  @Environment(\.colorScheme) var colorScheme
+  @Environment(\.controlActiveState) var controlActiveState
 
   private let config: ZenStyleConfiguration
-  private let menuIndicator: Visibility
 
-  init(_ config: ZenStyleConfiguration,
-              menuIndicator: Visibility = .visible) {
+  init(_ config: ZenStyleConfiguration) {
     self.config = config
-    self.menuIndicator = menuIndicator
     _isHovered = .init(initialValue: config.hoverEffect ? false : true)
   }
 
   func makeBody(configuration: Configuration) -> some View {
-    Menu(configuration)
-      .menuStyle(.borderlessButton)
-      .font(.caption)
-      .truncationMode(.middle)
-      .allowsTightening(true)
-      .foregroundColor(Color(.textColor))
-      .onHover(perform: { value in
-        guard config.hoverEffect else { return }
-        self.isHovered = value
-      })
-      .padding(.horizontal, config.padding.horizontal)
+    configuration.label
       .padding(.vertical, config.padding.vertical)
-      .frame(minHeight: 24)
+      .padding(.horizontal, config.padding.horizontal * 1.5)
+      .foregroundColor(Color(.textColor))
       .background(
         ZenStyleBackgroundView(
           cornerRadius: config.cornerRadius,
@@ -38,27 +27,32 @@ struct ZenMenuStyle: MenuStyle {
       .grayscale(grayscale())
       .compositingGroup()
       .shadow(color: Color.black.opacity(isHovered ? 0.5 : 0),
-              radius: isHovered ? 1 : 1.25,
-              y: isHovered ? 2 : 3)
+              radius: configuration.isPressed ? 0 : isHovered ? 1 : 1.25,
+              y: configuration.isPressed ? 0 : isHovered ? 2 : 3)
       .opacity(opacity())
+      .offset(y: configuration.isPressed ? 0.25 : 0.0)
+      .animation(.easeOut(duration: 0.2), value: configuration.isPressed)
       .animation(.easeOut(duration: 0.2), value: isHovered)
-      .contentShape(Rectangle())
+      .onHover(perform: { value in
+        guard config.hoverEffect else { return }
+        self.isHovered = value
+      })
   }
 
   private func grayscale() -> CGFloat {
-    config.grayscaleEffect ? isHovered ? 0 
+    config.grayscaleEffect ? isHovered ? 0
     : isHovered ? 0.5 : 1
     : 0
   }
 
   private func opacity() -> CGFloat {
-    isHovered 
+    isHovered
     ? 1.0
     : colorScheme == .light ? 1 : 0.8
   }
 }
 
-struct ZenMenuStyle_Previews: PreviewProvider {
+struct ZenButtonStyle_Previews: PreviewProvider {
   static var colors: [NSColor] = [
     NSColor.systemRed,
     NSColor.systemOrange,
@@ -71,18 +65,28 @@ struct ZenMenuStyle_Previews: PreviewProvider {
     NSColor.systemMint,
   ]
 
-
   static var previews: some View {
     VStack {
+      Button("Primary", action: {})
+        .buttonStyle(.primary)
+      Button("Positive", action: {})
+        .buttonStyle(.positive)
+      Button("Destructive", action: {})
+        .buttonStyle(.destructive)
+
+      Divider()
+        .fixedSize()
+
       ForEach(colors, id: \.self) {
-        Menu("Light menu", content: { Text("Hello") })
+        Button(action: {}, label: { Text("Light button") })
           .environment(\.colorScheme, .light)
-          .menuStyle(.zen(ZenStyleConfiguration(nsColor: $0)))
-        Menu("Dark menu", content: { Text("Hello") })
+          .buttonStyle(.zen(ZenStyleConfiguration(nsColor: $0)))
+        Button(action: {}, label: { Text("Dark button") })
           .environment(\.colorScheme, .dark)
-          .menuStyle(.zen(ZenStyleConfiguration(nsColor: $0)))
+          .buttonStyle(.zen(ZenStyleConfiguration(nsColor: $0)))
       }
     }
+    .previewLayout(.sizeThatFits)
     .padding()
   }
 }

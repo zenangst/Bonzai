@@ -1,17 +1,17 @@
 import SwiftUI
 
-public enum ZenMenuStyleKind {
-  case zen(ZenConfiguration)
+public enum ZenMenuVariant {
+  case zen(ZenStyleConfiguration)
 }
 
 public extension View {
-  func menuStyle(_ kind: ZenMenuStyleKind) -> some View {
-    let menuStyle = resolveMenuStyle(kind)
+  func menuStyle(_ variant: ZenMenuVariant) -> some View {
+    let menuStyle = resolve(variant)
     return self.menuStyle(menuStyle)
   }
 
-  private func resolveMenuStyle(_ kind: ZenMenuStyleKind) -> some MenuStyle {
-    switch kind {
+  private func resolve(_ variant: ZenMenuVariant) -> some MenuStyle {
+    switch variant {
     case.zen(let config): ZenMenuStyle(config)
     }
   }
