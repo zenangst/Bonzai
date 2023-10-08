@@ -20,6 +20,7 @@ struct ZenButtonStyle: ButtonStyle {
       .background(
         ZenStyleBackgroundView(
           cornerRadius: config.cornerRadius,
+          calm: config.calm,
           isHovered: $isHovered,
           nsColor: config.nsColor
         )
@@ -66,24 +67,30 @@ struct ZenButtonStyle_Previews: PreviewProvider {
   ]
 
   static var previews: some View {
-    VStack {
-      Button("Primary", action: {})
-        .buttonStyle(.primary)
-      Button("Positive", action: {})
-        .buttonStyle(.positive)
-      Button("Destructive", action: {})
-        .buttonStyle(.destructive)
+    HStack(alignment: .top) {
+      VStack {
+        Button(action: {}, label: {
+          Image(systemName: "person")
+        })
+        .buttonStyle(.calm(.green))
 
-      Divider()
-        .fixedSize()
+        Button("Primary", action: {})
+          .buttonStyle(.primary)
+        Button("Positive", action: {})
+          .buttonStyle(.positive)
+        Button("Destructive", action: {})
+          .buttonStyle(.destructive)
+      }
 
-      ForEach(colors, id: \.self) {
-        Button(action: {}, label: { Text("Light button") })
-          .environment(\.colorScheme, .light)
-          .buttonStyle(.zen(ZenStyleConfiguration(nsColor: $0)))
-        Button(action: {}, label: { Text("Dark button") })
-          .environment(\.colorScheme, .dark)
-          .buttonStyle(.zen(ZenStyleConfiguration(nsColor: $0)))
+      VStack {
+        ForEach(colors, id: \.self) {
+          Button(action: {}, label: { Text("Light button") })
+            .environment(\.colorScheme, .light)
+            .buttonStyle(.zen(ZenStyleConfiguration(nsColor: $0)))
+          Button(action: {}, label: { Text("Dark button") })
+            .environment(\.colorScheme, .dark)
+            .buttonStyle(.zen(ZenStyleConfiguration(nsColor: $0)))
+        }
       }
     }
     .previewLayout(.sizeThatFits)

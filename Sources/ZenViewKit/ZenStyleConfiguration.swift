@@ -5,6 +5,7 @@ public struct ZenStyleConfiguration {
   let nsColor: NSColor
   let padding: Padding
   let grayscaleEffect: Bool
+  let calm: Bool
   let hoverEffect: Bool
 
   public struct Padding {
@@ -17,13 +18,16 @@ public struct ZenStyleConfiguration {
     }
   }
 
-  internal init(nsColor: NSColor, cornerRadius: CGFloat = 4,
+  internal init(nsColor: NSColor, 
+                cornerRadius: CGFloat = 4,
                 padding: Padding = .init(horizontal: 4, vertical: 4),
+                calm: Bool = false,
                 grayscaleEffect: Bool = false,
                 hoverEffect: Bool = true) {
     self.nsColor = nsColor
     self.cornerRadius = cornerRadius
     self.padding = padding
+    self.calm = calm
     self.grayscaleEffect = grayscaleEffect
     self.hoverEffect = hoverEffect
   }

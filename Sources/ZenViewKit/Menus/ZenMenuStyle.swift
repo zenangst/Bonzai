@@ -31,6 +31,7 @@ struct ZenMenuStyle: MenuStyle {
       .background(
         ZenStyleBackgroundView(
           cornerRadius: config.cornerRadius,
+          calm: config.calm,
           isHovered: $isHovered,
           nsColor: config.nsColor
         )

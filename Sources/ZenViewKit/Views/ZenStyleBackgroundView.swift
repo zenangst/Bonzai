@@ -3,23 +3,23 @@ import SwiftUI
 struct ZenStyleBackgroundView: View {
   @Environment(\.colorScheme) var colorScheme
   let cornerRadius: CGFloat
+  let calm: Bool
   @Binding var isHovered: Bool
   let nsColor: NSColor
 
   var body: some View {
-    ZStack {
-      RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-        .fill(LinearGradient(
-          stops: Gradient.Stop.zen(colorScheme,
-                                   nsColor: nsColor),
-          startPoint: .top, endPoint: .bottom))
-        .background(
-          RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-            .stroke(strokeColor(), lineWidth: 1)
-            .offset(y: 0.25)
-        )
-        .opacity(opacity())
-    }
+    RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+      .fill(LinearGradient(
+        stops: Gradient.Stop.zen(colorScheme,
+                                 nsColor: nsColor),
+        startPoint: .top, endPoint: .bottom))
+      .background(
+        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+          .stroke(strokeColor(), lineWidth: 1)
+          .offset(y: 0.25)
+      )
+      .opacity(opacity())
+      .opacity(calm && isHovered == false ? 0 : 1)
   }
 
   private func opacity() -> CGFloat {

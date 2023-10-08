@@ -1,6 +1,7 @@
 import SwiftUI
 
 public enum ZenButtonVariant {
+  case calm(NSColor)
   case primary
   case positive
   case destructive
@@ -15,6 +16,8 @@ public extension View {
 
   private func resolve(_ variant: ZenButtonVariant) -> some ButtonStyle {
     switch variant {
+    case .calm(let nsColor):
+      ZenButtonStyle(.init(nsColor: nsColor, calm: true))
     case .primary:
       ZenButtonStyle(.init(nsColor: .controlAccentColor))
     case .positive:
