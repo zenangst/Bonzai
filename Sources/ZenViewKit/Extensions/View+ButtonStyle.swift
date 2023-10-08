@@ -1,7 +1,8 @@
 import SwiftUI
 
 public enum ZenButtonVariant {
-  case calm(NSColor)
+  case calm(color: ZenColor, padding: ZenSize)
+  case regular
   case primary
   case positive
   case destructive
@@ -16,14 +17,18 @@ public extension View {
 
   private func resolve(_ variant: ZenButtonVariant) -> some ButtonStyle {
     switch variant {
-    case .calm(let nsColor):
-      ZenButtonStyle(.init(nsColor: nsColor, calm: true))
+    case .calm(let color, let padding):
+      ZenButtonStyle(.init(color: color,
+                           padding: .init(horizontal: padding, vertical: padding),
+                           calm: true))
+    case .regular:
+      ZenButtonStyle(.init(color: .systemGray))
     case .primary:
-      ZenButtonStyle(.init(nsColor: .controlAccentColor))
+      ZenButtonStyle(.init(color: .accentColor))
     case .positive:
-      ZenButtonStyle(.init(nsColor: .systemGreen))
+      ZenButtonStyle(.init(color: .systemGreen, grayscaleEffect: false, hoverEffect: false))
     case .destructive:
-      ZenButtonStyle(.init(nsColor: .systemRed))
+      ZenButtonStyle(.init(color: .systemRed, grayscaleEffect: false, hoverEffect: false))
     case .zen(let config):
       ZenButtonStyle(config)
     }

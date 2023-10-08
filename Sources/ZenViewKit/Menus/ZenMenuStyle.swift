@@ -25,15 +25,15 @@ struct ZenMenuStyle: MenuStyle {
         guard config.hoverEffect else { return }
         self.isHovered = value
       })
-      .padding(.horizontal, config.padding.horizontal)
-      .padding(.vertical, config.padding.vertical)
+      .padding(.horizontal, config.padding.horizontal.padding)
+      .padding(.vertical, config.padding.vertical?.padding)
       .frame(minHeight: 24)
       .background(
         ZenStyleBackgroundView(
           cornerRadius: config.cornerRadius,
           calm: config.calm,
           isHovered: $isHovered,
-          nsColor: config.nsColor
+          nsColor: config.color.nsColor
         )
       )
       .grayscale(grayscale())
@@ -60,28 +60,27 @@ struct ZenMenuStyle: MenuStyle {
 }
 
 struct ZenMenuStyle_Previews: PreviewProvider {
-  static var colors: [NSColor] = [
-    NSColor.systemRed,
-    NSColor.systemOrange,
-    NSColor.systemYellow,
-    NSColor.systemGreen,
-    NSColor.systemBlue,
-    NSColor.systemPurple,
-    NSColor.systemGray,
-    NSColor.systemCyan,
-    NSColor.systemMint,
+  static var colors: [ZenColor] = [
+    .systemRed,
+    .systemOrange,
+    .systemYellow,
+    .systemGreen,
+    .systemBlue,
+    .systemPurple,
+    .systemGray,
+    .systemCyan,
+    .systemMint,
   ]
-
 
   static var previews: some View {
     VStack {
       ForEach(colors, id: \.self) {
         Menu("Light menu", content: { Text("Hello") })
           .environment(\.colorScheme, .light)
-          .menuStyle(.zen(ZenStyleConfiguration(nsColor: $0)))
+          .menuStyle(.zen(ZenStyleConfiguration(color: $0)))
         Menu("Dark menu", content: { Text("Hello") })
           .environment(\.colorScheme, .dark)
-          .menuStyle(.zen(ZenStyleConfiguration(nsColor: $0)))
+          .menuStyle(.zen(ZenStyleConfiguration(color: $0)))
       }
     }
     .padding()
