@@ -3,35 +3,44 @@ import SwiftUI
 struct ZenTextFieldStyle: TextFieldStyle {
   @FocusState var isFocused: Bool
   @State var isHovered: Bool = false
-  private let color: ZenColor
-  private let font: Font
-  private let unfocusedOpacity: CGFloat
+  private let config: ZenStyleConfiguration
 
-  init(_ font: Font = .body, unfocusedOpacity: CGFloat = 0.1, color: ZenColor = .accentColor) {
-    self.color = color
-    self.unfocusedOpacity = unfocusedOpacity
-    self.font = font
+  init(_ config: ZenStyleConfiguration = .init()) {
+    self.config = config
   }
 
   func _body(configuration: TextField<_Label>) -> some View {
     HStack {
       configuration
         .textFieldStyle(.plain)
-        .modifier(ZenTextViewModifier(font))
+        .modifier(ZenTextViewModifier(config.font))
         .background(
           RoundedRectangle(cornerRadius: 4 + 1.5)
-            .strokeBorder(Color(nsColor: color.nsColor), lineWidth: 1.5)
+            .strokeBorder(Color(config.color.nsColor), lineWidth: 1.5)
             .padding(-1.5)
-            .opacity(isFocused ? 1 : isHovered ? 0.5 : unfocusedOpacity)
-            .background()
+            .opacity(isFocused ? 1 : isHovered ? 0.5 : config.unfocusedOpacity)
+            .background(
+              config.backgroundColor
+            )
             .clipShape(
               RoundedRectangle(cornerRadius: 4)
             )
             .background(
               RoundedRectangle(cornerRadius: 4 + 2.5)
-                .strokeBorder(Color(nsColor: color.nsColor).opacity(0.5), lineWidth: 1.5)
+                .strokeBorder(Color(config.color.nsColor).opacity(0.5), lineWidth: 1.5)
                 .padding(-2.5)
-                .opacity(isFocused ? 1 : isHovered ? 0.5 : unfocusedOpacity)
+                .opacity(isFocused ? 1 : isHovered ? 0.5 : config.unfocusedOpacity)
+            )
+            .overlay(
+              RoundedRectangle(cornerRadius: 4)
+                .stroke(Color(isFocused ? config.color.nsColor : .windowFrameTextColor), lineWidth: 2)
+                .compositingGroup()
+                .shadow(color: Color(isFocused ? config.color.nsColor : .clear), radius: 2)
+                .padding(-1)
+                .opacity(
+                  config.glow ? (isFocused ? 0.75
+                                 : isHovered
+                                 ? 0.25 : 0) : 0)
             )
             .compositingGroup()
             .grayscale(isFocused ? 0 : 0.5)
@@ -54,22 +63,28 @@ struct ZenTextFieldStyle_Preview: PreviewProvider {
       VStack {
         TextField("Regular TextField", text: .constant(""))
 
+        TextField("Large TextField", text: .constant(""))
+          .textFieldStyle(.large(color: .accentColor, backgroundColor: Color.clear, glow: true))
+
         TextField("Zen TextField", text: .constant(""))
-          .textFieldStyle(.regular)
+          .textFieldStyle(.regular(nil))
 
         TextField("Zen TextField colored", text: .constant(""))
-          .textFieldStyle(.zen(.title, 0.1, .systemPurple))
+          .textFieldStyle(.zen(.init(color: .systemPurple)))
       }
       .environment(\.colorScheme, .light)
 
       VStack {
         TextField("Regular TextField", text: .constant(""))
 
+        TextField("Large TextField", text: .constant(""))
+          .textFieldStyle(.large(color: .accentColor, backgroundColor: .clear, glow: true))
+
         TextField("Zen TextField", text: .constant(""))
-          .textFieldStyle(.regular)
+          .textFieldStyle(.regular(nil))
 
         TextField("Zen TextField colored", text: .constant(""))
-          .textFieldStyle(.zen(.title, 0.1, .systemPurple))
+          .textFieldStyle(.zen(.init(color: .systemPurple)))
       }
       .environment(\.colorScheme, .dark)
     }

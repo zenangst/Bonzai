@@ -18,9 +18,16 @@ public extension View {
   private func resolve(_ variant: ZenButtonVariant) -> some ButtonStyle {
     switch variant {
     case .calm(let color, let padding):
-      ZenButtonStyle(.init(color: color,
-                           padding: .init(horizontal: padding, vertical: padding),
-                           calm: true))
+      ZenButtonStyle(
+        .init(
+          calm: true,
+          color: color,
+          padding: .init(
+            horizontal: padding,
+            vertical: padding
+          )
+        )
+      )
     case .regular:
       ZenButtonStyle(.init(color: .systemGray))
     case .primary:

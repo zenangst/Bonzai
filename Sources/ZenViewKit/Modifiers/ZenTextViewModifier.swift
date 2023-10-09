@@ -11,7 +11,6 @@ struct ZenTextViewModifier: ViewModifier {
         content
             .padding(2.5)
             .font(font)
-            .bold()
     }
 }
 

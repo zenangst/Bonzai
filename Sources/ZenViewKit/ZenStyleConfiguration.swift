@@ -2,10 +2,14 @@ import Cocoa
 import SwiftUI
 
 public struct ZenStyleConfiguration {
-  let cornerRadius: CGFloat
-  let color: ZenColor
-  let padding: Padding
   let calm: Bool
+  let color: ZenColor
+  let backgroundColor: Color
+  let cornerRadius: CGFloat
+  let font: Font
+  let glow: Bool
+  let padding: Padding
+  let unfocusedOpacity: CGFloat
 
   var grayscaleEffect: Binding<Bool>
   var hoverEffect: Binding<Bool>
@@ -20,17 +24,25 @@ public struct ZenStyleConfiguration {
     }
   }
 
-  public init(color: ZenColor,
+  public init(calm: Bool = false,
+              color: ZenColor = .accentColor,
+              backgroundColor: Color = Color(nsColor: .textBackgroundColor),
               cornerRadius: CGFloat = 4,
-              padding: Padding = .init(horizontal: .medium, vertical: .medium),
-              calm: Bool = false,
+              font: Font = .body,
+              glow: Bool = false,
               grayscaleEffect: Binding<Bool> = .constant(false),
-              hoverEffect: Binding<Bool> = .constant(true)) {
+              hoverEffect: Binding<Bool> = .constant(true),
+              padding: Padding = .init(horizontal: .medium, vertical: .medium),
+              unfocusedOpacity: CGFloat = 0.1) {
+    self.backgroundColor = backgroundColor
+    self.calm = calm
     self.color = color
     self.cornerRadius = cornerRadius
-    self.padding = padding
-    self.calm = calm
+    self.font = font
     self.grayscaleEffect = grayscaleEffect
+    self.glow = glow
     self.hoverEffect = hoverEffect
+    self.padding = padding
+    self.unfocusedOpacity = unfocusedOpacity
   }
 }

@@ -5,15 +5,18 @@ public struct ZenTextEditor: View {
   @State var isHovered: Bool = false
   @Binding var text: String
 
+  private let color: ZenColor
   private let font: Font
   private let placeholder: String
   private let onCommandReturnKey: (() -> Void)?
 
-  public init(text: Binding<String>,
+  public init(color: ZenColor = .accentColor,
+              text: Binding<String>,
               placeholder: String,
               font: Font = .body,
               onCommandReturnKey: (() -> Void)? = nil) {
     _text = text
+    self.color = color
     self.placeholder = placeholder
     self.font = font
     self.onCommandReturnKey = onCommandReturnKey
@@ -30,7 +33,7 @@ public struct ZenTextEditor: View {
         RoundedRectangle(cornerRadius: 4)
           .fill(
             Color(isFocused
-                  ? .controlAccentColor.withAlphaComponent(0.5)
+                  ? color.nsColor.withAlphaComponent(0.5)
                   : .windowFrameTextColor.withAlphaComponent(0.15)
                  )
           )
@@ -40,7 +43,7 @@ public struct ZenTextEditor: View {
         Text(placeholder)
           .font(font)
           .animation(nil, value: text.isEmpty)
-          .opacity(text.isEmpty || !isFocused ? 0.5 : 0)
+          .opacity(text.isEmpty ? 0.5 : 0)
           .animation(.easeInOut(duration: 0.2), value: text.isEmpty)
           .allowsHitTesting(false)
           .padding(.top, 4)
@@ -52,12 +55,12 @@ public struct ZenTextEditor: View {
       .padding(4)
       .background(
         RoundedRectangle(cornerRadius: 4)
-          .fill(Color(isFocused ? .controlAccentColor.withAlphaComponent(0.5) : .windowFrameTextColor))
+          .fill(Color(isFocused ? color.nsColor.withAlphaComponent(0.5) : .windowFrameTextColor))
           .opacity(isFocused ? 0.15 : isHovered ? 0.015 : 0)
       )
       .background(
         RoundedRectangle(cornerRadius: 4)
-          .stroke(Color(isFocused ? .controlAccentColor.withAlphaComponent(0.5) : .windowFrameTextColor), lineWidth: 1)
+          .stroke(Color(isFocused ? color.nsColor.withAlphaComponent(0.5) : .windowFrameTextColor), lineWidth: 1)
           .opacity(isFocused ? 0.75 : isHovered ? 0.15 : 0)
 
       )
@@ -82,8 +85,8 @@ echo "hello world"
 """)
   static var previews: some View {
     Group {
-      ZenTextEditor(text: .constant(""), placeholder: "Enter text ...")
-      ZenTextEditor(text: $code.text, placeholder: "Script goes here…", font: Font.system(.body, design: .monospaced))
+      ZenTextEditor(color: .systemGreen, text: .constant(""), placeholder: "Enter text ...")
+      ZenTextEditor(color: .systemPurple, text: $code.text, placeholder: "Script goes here…", font: Font.system(.body, design: .monospaced))
     }
   }
 }
