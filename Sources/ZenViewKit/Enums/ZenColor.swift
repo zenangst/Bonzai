@@ -14,6 +14,7 @@ public enum ZenColor {
   case systemCyan
   case systemMint
   case systemTeal
+  case systemIndigo
 
   public var nsColor: NSColor {
     switch self {
@@ -43,6 +44,8 @@ public enum ZenColor {
       NSColor.systemMint
     case .systemTeal:
       NSColor.systemTeal
+    case .systemIndigo:
+      NSColor.systemIndigo
     }
 
   }

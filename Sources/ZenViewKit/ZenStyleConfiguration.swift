@@ -1,12 +1,14 @@
 import Cocoa
+import SwiftUI
 
 public struct ZenStyleConfiguration {
   let cornerRadius: CGFloat
   let color: ZenColor
   let padding: Padding
-  let grayscaleEffect: Bool
   let calm: Bool
-  let hoverEffect: Bool
+
+  var grayscaleEffect: Binding<Bool>
+  var hoverEffect: Binding<Bool>
 
   public struct Padding {
     let horizontal: ZenSize
@@ -22,8 +24,8 @@ public struct ZenStyleConfiguration {
               cornerRadius: CGFloat = 4,
               padding: Padding = .init(horizontal: .medium, vertical: .medium),
               calm: Bool = false,
-              grayscaleEffect: Bool = false,
-              hoverEffect: Bool = true) {
+              grayscaleEffect: Binding<Bool> = .constant(false),
+              hoverEffect: Binding<Bool> = .constant(true)) {
     self.color = color
     self.cornerRadius = cornerRadius
     self.padding = padding

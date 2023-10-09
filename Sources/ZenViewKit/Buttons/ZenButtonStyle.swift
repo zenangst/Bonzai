@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ZenButtonStyle: ButtonStyle {
   @State private var isHovered: Bool
+  @Binding private var hoverEffect: Bool
   @Environment(\.colorScheme) var colorScheme
   @Environment(\.controlActiveState) var controlActiveState
 
@@ -9,7 +10,8 @@ struct ZenButtonStyle: ButtonStyle {
 
   init(_ config: ZenStyleConfiguration) {
     self.config = config
-    _isHovered = .init(initialValue: config.hoverEffect ? false : true)
+    _isHovered = .init(initialValue: config.hoverEffect.wrappedValue ? false : true)
+    _hoverEffect = config.hoverEffect
   }
 
   func makeBody(configuration: Configuration) -> some View {
@@ -35,15 +37,18 @@ struct ZenButtonStyle: ButtonStyle {
       .animation(.easeOut(duration: 0.2), value: configuration.isPressed)
       .animation(.easeOut(duration: 0.2), value: isHovered)
       .onHover(perform: { value in
-        guard config.hoverEffect else { return }
+        guard config.hoverEffect.wrappedValue else { return }
         self.isHovered = value
+      })
+      .onChange(of: hoverEffect, perform: { newValue in
+        self.isHovered = !newValue
       })
   }
 
   private func grayscale() -> CGFloat {
-    config.grayscaleEffect ? isHovered ? 0
+    config.grayscaleEffect.wrappedValue ? isHovered ? 0
     : isHovered ? 0.5 : 1
-    : 0
+    : controlActiveState == .key ? 0 : 0.4
   }
 
   private func opacity() -> CGFloat {

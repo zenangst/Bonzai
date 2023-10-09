@@ -26,9 +26,9 @@ public extension View {
     case .primary:
       ZenButtonStyle(.init(color: .accentColor))
     case .positive:
-      ZenButtonStyle(.init(color: .systemGreen, grayscaleEffect: false, hoverEffect: false))
+      ZenButtonStyle(.init(color: .systemGreen, grayscaleEffect: .constant(false), hoverEffect: .constant(false)))
     case .destructive:
-      ZenButtonStyle(.init(color: .systemRed, grayscaleEffect: false, hoverEffect: false))
+      ZenButtonStyle(.init(color: .systemRed, grayscaleEffect: .constant(false), hoverEffect: .constant(false)))
     case .zen(let config):
       ZenButtonStyle(config)
     }

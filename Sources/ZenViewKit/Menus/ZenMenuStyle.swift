@@ -1,17 +1,17 @@
 import SwiftUI
 
 struct ZenMenuStyle: MenuStyle {
+  @Environment(\.controlActiveState) var controlActiveState
   @Environment(\.colorScheme) var colorScheme
   @State private var isHovered: Bool
+  @Binding private var hoverEffect: Bool
 
   private let config: ZenStyleConfiguration
-  private let menuIndicator: Visibility
 
-  init(_ config: ZenStyleConfiguration,
-              menuIndicator: Visibility = .visible) {
+  init(_ config: ZenStyleConfiguration) {
     self.config = config
-    self.menuIndicator = menuIndicator
-    _isHovered = .init(initialValue: config.hoverEffect ? false : true)
+    _isHovered = .init(initialValue: config.hoverEffect.wrappedValue ? false : true)
+    _hoverEffect = config.hoverEffect
   }
 
   func makeBody(configuration: Configuration) -> some View {
@@ -22,7 +22,7 @@ struct ZenMenuStyle: MenuStyle {
       .allowsTightening(true)
       .foregroundColor(Color(.textColor))
       .onHover(perform: { value in
-        guard config.hoverEffect else { return }
+        guard config.hoverEffect.wrappedValue else { return }
         self.isHovered = value
       })
       .padding(.horizontal, config.padding.horizontal.padding)
@@ -47,9 +47,9 @@ struct ZenMenuStyle: MenuStyle {
   }
 
   private func grayscale() -> CGFloat {
-    config.grayscaleEffect ? isHovered ? 0 
+    config.grayscaleEffect.wrappedValue ? isHovered ? 0 
     : isHovered ? 0.5 : 1
-    : 0
+    : controlActiveState == .key ? 0 : 0.4
   }
 
   private func opacity() -> CGFloat {
