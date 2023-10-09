@@ -1,6 +1,7 @@
 import AppKit
+import SwiftUI
 
-public enum ZenColor {
+public enum ZenColor: Hashable {
   case accentColor
   case black
   case systemRed
@@ -15,6 +16,7 @@ public enum ZenColor {
   case systemMint
   case systemTeal
   case systemIndigo
+  case custom(Color)
 
   public var nsColor: NSColor {
     switch self {
@@ -46,7 +48,8 @@ public enum ZenColor {
       NSColor.systemTeal
     case .systemIndigo:
       NSColor.systemIndigo
+    case .custom(let color):
+      NSColor(color)
     }
-
   }
 }
