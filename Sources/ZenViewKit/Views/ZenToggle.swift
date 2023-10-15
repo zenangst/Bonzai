@@ -28,7 +28,7 @@ public struct ZenToggle: View {
   private let config: ZenStyleConfiguration
   private let onChange: (Bool) -> Void
 
-  public init(_ titleKey: String,
+  public init(_ titleKey: String = "",
        config: ZenStyleConfiguration = .init(color: .systemGreen),
        style: Style = .regular,
        isOn: Binding<Bool>,
@@ -43,7 +43,7 @@ public struct ZenToggle: View {
 
   public var body: some View {
     HStack {
-      Text(titleKey)
+      if !titleKey.isEmpty { Text(titleKey) }
       Button(action: {
         isOn.toggle()
         onChange(isOn)
@@ -125,6 +125,11 @@ struct ZenToggle_Previews: PreviewProvider {
         VStack(alignment: .leading) {
           Text("Regular")
             .font(.headline)
+
+          ZenToggle("",
+                    style: .regular,
+                    isOn: .constant(true)) { _ in }
+
           ZenToggle("Default on",
                     style: .regular,
                     isOn: .constant(true)) { _ in }

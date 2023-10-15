@@ -31,7 +31,7 @@ public struct ZenCheckbox: View {
   private let titleKey: String
   private let onChange: (Bool) -> Void
 
-  public init(_ titleKey: String,
+  public init(_ titleKey: String = "",
        style: Style = .regular,
        config: ZenStyleConfiguration = .init(),
        isOn: Binding<Bool>,
@@ -62,8 +62,10 @@ public struct ZenCheckbox: View {
         .onHover(perform: { newValue in
           isHovered = newValue
         })
-      Text(titleKey)
-        .frame(alignment: .leading)
+      if !titleKey.isEmpty {
+        Text(titleKey)
+          .frame(alignment: .leading)
+      }
     })
     .buttonStyle(.plain)
   }
@@ -97,8 +99,7 @@ struct ZenCheckbox_Previews: PreviewProvider {
         }
 
         VStack(alignment: .leading) {
-          Text("Regular")
-            .font(.headline)
+          Text("Regular").font(.headline)
           ZenCheckbox("Default on", isOn: .constant(true))
           ZenCheckbox("Default off", isOn: .constant(false))
         }
