@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct ZenTextFieldStyle: TextFieldStyle {
+  @Environment(\.controlActiveState) var controlActiveState
   @FocusState var isFocused: Bool
   @State var isHovered: Bool = false
   private let config: ZenStyleConfiguration
@@ -14,6 +15,8 @@ struct ZenTextFieldStyle: TextFieldStyle {
       configuration
         .textFieldStyle(.plain)
         .modifier(ZenTextViewModifier(config.font))
+        .padding(.horizontal, 4)
+        .padding(.vertical, 2)
         .background(
           RoundedRectangle(cornerRadius: 4 + 1.5)
             .strokeBorder(Color(config.color.nsColor), lineWidth: 1.5)
@@ -29,11 +32,12 @@ struct ZenTextFieldStyle: TextFieldStyle {
               RoundedRectangle(cornerRadius: 4 + 2.5)
                 .strokeBorder(Color(config.color.nsColor).opacity(0.5), lineWidth: 1.5)
                 .padding(-2.5)
-                .opacity(isFocused ? 1 : isHovered ? 0.5 : config.unfocusedOpacity)
+                .opacity(isFocused ? 1 : config.unfocusedOpacity)
             )
             .overlay(
               RoundedRectangle(cornerRadius: 4)
                 .stroke(Color(isFocused ? config.color.nsColor : .windowFrameTextColor), lineWidth: 2)
+                .animation(.easeInOut(duration: 0.25), value: isFocused)
                 .compositingGroup()
                 .shadow(color: Color(isFocused ? config.color.nsColor : .clear), radius: 2)
                 .padding(-1)
@@ -43,17 +47,22 @@ struct ZenTextFieldStyle: TextFieldStyle {
                                  ? 0.25 : 0) : 0)
             )
             .compositingGroup()
-            .grayscale(isFocused ? 0 : 0.5)
+            .grayscale(grayscale())
             .animation(.easeInOut(duration: 0.25), value: isHovered)
             .animation(.easeInOut(duration: 0.25), value: isFocused)
         )
-        .padding(2.5)
         .compositingGroup()
         .onHover(perform: { newValue in
           isHovered = newValue
         })
         .focused($isFocused)
     }
+  }
+
+  private func grayscale() -> CGFloat {
+    isFocused
+    ? controlActiveState == .key ? 0 : 0.2
+    : isHovered ? 0 : 0.2
   }
 }
 
