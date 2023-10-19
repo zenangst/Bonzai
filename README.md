@@ -1,4 +1,4 @@
-# ZenViewKit
+# Bonzai 
 
 ## Description
 
@@ -16,5 +16,5 @@ Christoffer Winterkvist, christoffer@winterkvist.com
 
 ## License
 
-**InputSource** is available under the MIT license. See the [LICENSE](https://github.com/zenangst/ZenViewKit/blob/main/LICENSE.md) file for more info.
+**InputSource** is available under the MIT license. See the [LICENSE](https://github.com/zenangst/Bonzai/blob/main/LICENSE.md) file for more info.
 
