@@ -2,14 +2,14 @@
 import PackageDescription
 
 let package = Package(
-    name: "ZenViewKit",
+    name: "Bonzai",
     platforms: [.macOS(.v13)],
     products: [
-        .library(name: "ZenViewKit", targets: ["ZenViewKit"]),
+        .library(name: "Bonzai", targets: ["Bonzai"]),
     ],
     targets: [
         .target(
-            name: "ZenViewKit",
+            name: "Bonzai",
             dependencies: [ ])
     ]
 )
