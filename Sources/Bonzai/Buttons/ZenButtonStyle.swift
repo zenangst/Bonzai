@@ -33,9 +33,9 @@ struct ZenButtonStyle: ButtonStyle {
               radius: configuration.isPressed ? 0 : isHovered ? 1 : 1.25,
               y: configuration.isPressed ? 0 : isHovered ? 2 : 3)
       .opacity(opacity())
-      .offset(y: configuration.isPressed ? 0.25 : 0.0)
-      .animation(.easeOut(duration: 0.2), value: configuration.isPressed)
-      .animation(.easeOut(duration: 0.2), value: isHovered)
+      .offset(y: configuration.isPressed ? 0.5 : 0.0)
+      .animation(.easeOut(duration: 0.1), value: configuration.isPressed)
+      .animation(.easeOut(duration: 0.1), value: isHovered)
       .onHover(perform: { value in
         guard config.hoverEffect.wrappedValue else { return }
         self.isHovered = value
