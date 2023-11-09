@@ -1,6 +1,7 @@
 import SwiftUI
 
 public struct ZenTextEditor: View {
+  @EnvironmentObject var publisher: ZenColorPublisher
   @FocusState var isFocused: Bool
   @State var isHovered: Bool = false
   @Binding var text: String
