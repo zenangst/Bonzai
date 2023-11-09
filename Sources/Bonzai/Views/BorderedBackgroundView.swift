@@ -20,6 +20,7 @@ public struct BorderedOverlayView: View {
         .strokeBorder(Color(nsColor: color.nsColor).opacity(0.5), lineWidth: 1.5)
         .padding(1.5)
     }
+    .opacity(isFocused ? 1 : 0)
     .allowsHitTesting(false)
   }
 }
