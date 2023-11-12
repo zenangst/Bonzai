@@ -29,10 +29,25 @@ struct ZenButtonStyle: ButtonStyle {
         )
       )
       .overlay {
-        RoundedRectangle(cornerRadius: 8)
-          .stroke(Color(nsColor: config.color.nsColor), lineWidth: 2)
-          .opacity(isFocused ? 0.5 : 0.0)
+        Group {
+          RoundedRectangle(cornerRadius: config.cornerRadius + 1.5, style: .continuous)
+            .strokeBorder(Color(nsColor: config.color.nsColor), lineWidth: 1.5)
+          RoundedRectangle(cornerRadius: config.cornerRadius, style: .continuous)
+            .strokeBorder(Color(nsColor: config.color.nsColor).opacity(0.5), lineWidth: 1.5)
+            .padding(1.5)
+        }
+        .opacity((isFocused && config.focusEffect.wrappedValue) ? 1 : 0.0)
+        .animation(.bouncy, value: isFocused)
       }
+      .background(
+        RoundedRectangle(cornerRadius: config.cornerRadius)
+          .fill(Color(nsColor: config.color.nsColor))
+          .shadow(color: Color(nsColor: config.color.nsColor), radius: 10, y: 3)
+          .blur(radius: 2)
+          .scaleEffect(0.9)
+          .opacity((isFocused && config.focusEffect.wrappedValue) ? 1 : 0.0)
+          .animation(.bouncy, value: isFocused)
+      )
       .grayscale(grayscale())
       .compositingGroup()
       .shadow(color: Color.black.opacity(isHovered ? 0.5 : 0),

@@ -11,6 +11,7 @@ public struct ZenStyleConfiguration {
   let padding: Padding
   let unfocusedOpacity: CGFloat
 
+  let focusEffect: Binding<Bool>
   var grayscaleEffect: Binding<Bool>
   var hoverEffect: Binding<Bool>
 
@@ -30,6 +31,7 @@ public struct ZenStyleConfiguration {
               cornerRadius: CGFloat = 4,
               font: Font = .body,
               glow: Bool = false,
+              focusEffect: Binding<Bool> = .constant(false),
               grayscaleEffect: Binding<Bool> = .constant(false),
               hoverEffect: Binding<Bool> = .constant(true),
               padding: Padding = .init(horizontal: .medium, vertical: .medium),
@@ -39,6 +41,7 @@ public struct ZenStyleConfiguration {
     self.color = color
     self.cornerRadius = cornerRadius
     self.font = font
+    self.focusEffect = focusEffect
     self.grayscaleEffect = grayscaleEffect
     self.glow = glow
     self.hoverEffect = hoverEffect
