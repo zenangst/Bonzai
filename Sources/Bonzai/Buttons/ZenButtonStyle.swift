@@ -3,6 +3,7 @@ import SwiftUI
 struct ZenButtonStyle: ButtonStyle {
   @State private var isHovered: Bool
   @Binding private var hoverEffect: Bool
+  @Environment(\.isFocused) var isFocused
   @Environment(\.colorScheme) var colorScheme
   @Environment(\.controlActiveState) var controlActiveState
 
@@ -27,6 +28,11 @@ struct ZenButtonStyle: ButtonStyle {
           nsColor: config.color.nsColor
         )
       )
+      .overlay {
+        RoundedRectangle(cornerRadius: 8)
+          .stroke(Color(nsColor: config.color.nsColor), lineWidth: 2)
+          .opacity(isFocused ? 0.5 : 0.0)
+      }
       .grayscale(grayscale())
       .compositingGroup()
       .shadow(color: Color.black.opacity(isHovered ? 0.5 : 0),
