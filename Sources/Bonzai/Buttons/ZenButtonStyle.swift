@@ -36,7 +36,7 @@ struct ZenButtonStyle: ButtonStyle {
             .strokeBorder(Color(nsColor: config.color.nsColor).opacity(0.5), lineWidth: 1.5)
             .padding(1.5)
         }
-        .opacity((isFocused && config.focusEffect.wrappedValue) ? 1 : 0.0)
+        .opacity(focusOverlayOpacity())
         .animation(.bouncy, value: isFocused)
       }
       .background(
@@ -45,7 +45,7 @@ struct ZenButtonStyle: ButtonStyle {
           .shadow(color: Color(nsColor: config.color.nsColor), radius: 10, y: 3)
           .blur(radius: 2)
           .scaleEffect(0.9)
-          .opacity((isFocused && config.focusEffect.wrappedValue) ? 1 : 0.0)
+          .opacity(focusBackgroundOpacity())
           .animation(.bouncy, value: isFocused)
       )
       .grayscale(grayscale())
@@ -59,11 +59,23 @@ struct ZenButtonStyle: ButtonStyle {
       .animation(.easeOut(duration: 0.1), value: isHovered)
       .onHover(perform: { value in
         guard config.hoverEffect.wrappedValue else { return }
+        guard self.isHovered != value else { return }
         self.isHovered = value
       })
       .onChange(of: hoverEffect, perform: { newValue in
         self.isHovered = !newValue
       })
+  }
+
+  private func focusOverlayOpacity() -> CGFloat {
+    (isFocused && config.focusEffect.wrappedValue && controlActiveState == .key)
+    ? 1 : 0.0
+  }
+
+  private func focusBackgroundOpacity() -> CGFloat {
+    (config.hoverEffect.wrappedValue == false
+     && isFocused && config.focusEffect.wrappedValue)
+    ? 1 : 0.0
   }
 
   private func grayscale() -> CGFloat {

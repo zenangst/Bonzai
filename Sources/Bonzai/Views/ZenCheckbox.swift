@@ -60,6 +60,7 @@ public struct ZenCheckbox: View {
         }
         .frame(width: style.size.width, height: style.size.height)
         .onHover(perform: { newValue in
+          guard isHovered != newValue else { return }
           isHovered = newValue
         })
       if !titleKey.isEmpty {
