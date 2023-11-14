@@ -33,6 +33,5 @@ public struct FocusableButton<Content, Focus>: View where Content: View, Focus: 
     .focusable(true)
     .focused(focus, equals: identity())
     .focusEffectDisabled_shim()
-
   }
 }
