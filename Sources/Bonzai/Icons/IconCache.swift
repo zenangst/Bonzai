@@ -1,3 +1,4 @@
+import AppKit
 import Cocoa
 import Foundation
 
@@ -7,12 +8,16 @@ enum IconCacheError: Error {
   case unableToCreateDataFromImageRepresentation
 }
 
-actor IconCache {
+public actor IconCache {
   private var cache = [String: NSImage]()
 
-  public static var shared = IconCache()
+  public static let shared = IconCache()
 
   private init() {}
+
+  public func clearCache() {
+    cache.removeAll()
+  }
 
   public func image(for icon: Icon, size: CGSize) -> NSImage? {
     let identifier: String = "\(icon.bundleIdentifier)_\(size.suffix).tiff"

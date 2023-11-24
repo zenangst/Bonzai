@@ -72,9 +72,21 @@ struct ZenMenuStyle_Previews: PreviewProvider {
     .systemMint,
   ]
 
+  static let columns = [
+    GridItem(.flexible()),
+    GridItem(.flexible()),
+    GridItem(.flexible()),
+    GridItem(.flexible())
+  ]
+
   static var previews: some View {
-    VStack {
+    LazyVGrid(columns: columns) {
       ForEach(colors, id: \.self) {
+        Menu("Light menu", content: { Text("Hello") })
+          .environment(\.colorScheme, .light)
+        Menu("Dark menu", content: { Text("Hello") })
+          .environment(\.colorScheme, .dark)
+
         Menu("Light menu", content: { Text("Hello") })
           .environment(\.colorScheme, .light)
           .menuStyle(.zen(ZenStyleConfiguration(color: $0)))
@@ -83,6 +95,7 @@ struct ZenMenuStyle_Previews: PreviewProvider {
           .menuStyle(.zen(ZenStyleConfiguration(color: $0)))
       }
     }
+    .frame(width: 500)
     .padding()
   }
 }
