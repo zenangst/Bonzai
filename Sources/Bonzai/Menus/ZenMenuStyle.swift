@@ -17,7 +17,6 @@ struct ZenMenuStyle: MenuStyle {
   func makeBody(configuration: Configuration) -> some View {
     Menu(configuration)
       .menuStyle(.borderlessButton)
-      .font(.caption)
       .truncationMode(.middle)
       .allowsTightening(true)
       .foregroundColor(Color(.textColor))
