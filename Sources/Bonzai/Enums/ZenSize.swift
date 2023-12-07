@@ -12,7 +12,7 @@ public enum ZenSize {
     case .medium:
       return 4
     case .large:
-      return 8
+      return 6
     }
   }
 }

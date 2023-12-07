@@ -18,8 +18,15 @@ struct ZenRoundedContainer: ViewModifier {
       .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
       .background(
         RoundedRectangle(cornerRadius: cornerRadius)
-          .stroke(Color(nsColor: .controlColor), lineWidth: 1)
+          .stroke(Color(nsColor: .controlColor).opacity(0.2), lineWidth: 3)
       )
+      .background(
+        RoundedRectangle(cornerRadius: cornerRadius + 1)
+          .stroke(Color(nsColor: .controlColor).opacity(0.4), lineWidth: 1)
+          .padding(-1)
+      )
+      .compositingGroup()
+      .shadow(color: Color(.sRGBLinear, white: 0, opacity: 0.4), radius: 2, y: 1)
       .padding(margin)
   }
 }
