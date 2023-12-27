@@ -52,6 +52,8 @@ public struct ZenCheckbox: View {
         .fill(isOnColor)
         .overlay {
           Image(systemName: "checkmark")
+            .symbolRenderingMode(.palette)
+            .foregroundStyle(.white.opacity(0.8))
             .font(Font.system(size: style.fontSize, weight: .heavy))
             .offset(y: isOn || isHovered ? 0 : -8)
             .opacity(isOn ? 1 : isHovered ? 0.5 : 0)

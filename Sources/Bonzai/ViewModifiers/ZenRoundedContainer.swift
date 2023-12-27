@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct ZenRoundedContainer: ViewModifier {
+  @Environment(\.colorScheme) var colorScheme
   private let cornerRadius: CGFloat
   private let padding: CGFloat
   private let margin: CGFloat
@@ -14,7 +15,7 @@ struct ZenRoundedContainer: ViewModifier {
   func body(content: Content) -> some View {
     content
       .padding(padding)
-      .background(Color(nsColor: .underPageBackgroundColor))
+      .background(background())
       .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
       .background(
         RoundedRectangle(cornerRadius: cornerRadius)
@@ -26,8 +27,20 @@ struct ZenRoundedContainer: ViewModifier {
           .padding(-1)
       )
       .compositingGroup()
-      .shadow(color: Color(.sRGBLinear, white: 0, opacity: 0.4), radius: 2, y: 1)
+      .shadow(color: shadowColor(), radius: 2, y: 1)
       .padding(margin)
+  }
+
+  private func background() -> Color? {
+    colorScheme == .dark
+    ? Color(nsColor: .underPageBackgroundColor)
+    : Color(nsColor: .alternateSelectedControlTextColor)
+  }
+
+  private func shadowColor() -> Color {
+    colorScheme == .dark
+      ? Color(.sRGBLinear, white: 0, opacity: 0.4)
+      : Color(.sRGBLinear, white: 0, opacity: 0.1)
   }
 }
 

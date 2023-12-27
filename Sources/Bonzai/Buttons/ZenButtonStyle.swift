@@ -3,9 +3,9 @@ import SwiftUI
 struct ZenButtonStyle: ButtonStyle {
   @State private var isHovered: Bool
   @Binding private var hoverEffect: Bool
-  @Environment(\.isFocused) var isFocused
-  @Environment(\.colorScheme) var colorScheme
-  @Environment(\.controlActiveState) var controlActiveState
+  @Environment(\.isFocused) private var isFocused
+  @Environment(\.colorScheme) private var colorScheme
+  @Environment(\.controlActiveState) private var controlActiveState
 
   private let config: ZenStyleConfiguration
 
@@ -19,7 +19,7 @@ struct ZenButtonStyle: ButtonStyle {
     configuration.label
       .padding(.vertical, config.padding.vertical?.padding)
       .padding(.horizontal, config.padding.horizontal.padding * 1.5)
-      .foregroundColor(Color(.textColor))
+      .foregroundColor(Color( colorScheme == .dark ? .textColor : .white))
       .background(
         ZenStyleBackgroundView(
           cornerRadius: config.cornerRadius,
@@ -42,7 +42,6 @@ struct ZenButtonStyle: ButtonStyle {
       .background(
         RoundedRectangle(cornerRadius: config.cornerRadius)
           .fill(Color(nsColor: config.color.nsColor))
-          .shadow(color: Color(nsColor: config.color.nsColor), radius: 10, y: 3)
           .blur(radius: 2)
           .scaleEffect(0.9)
           .opacity(focusBackgroundOpacity())
@@ -50,8 +49,16 @@ struct ZenButtonStyle: ButtonStyle {
       )
       .grayscale(grayscale())
       .compositingGroup()
-      .shadow(color: Color.black.opacity(isHovered ? 0.5 : 0),
-              radius: configuration.isPressed ? 0 : isHovered ? 1 : 1.25,
+      .shadow(color: Color.black.opacity(
+        isHovered 
+        ? colorScheme == .dark ? 0.5 : 0.2
+        : 0
+      ),
+              radius: configuration.isPressed 
+              ? 0
+              : isHovered
+              ? colorScheme == .light ? 0.25 : 1
+                                             : 1.25,
               y: configuration.isPressed ? 0 : isHovered ? 2 : 3)
       .opacity(opacity())
       .offset(y: configuration.isPressed ? 0.5 : 0.0)
@@ -66,6 +73,8 @@ struct ZenButtonStyle: ButtonStyle {
         self.isHovered = !newValue
       })
   }
+
+  // MARK: - Private methods
 
   private func focusOverlayOpacity() -> CGFloat {
     (isFocused && config.focusEffect.wrappedValue && controlActiveState == .key)
