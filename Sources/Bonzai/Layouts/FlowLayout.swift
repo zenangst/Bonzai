@@ -1,25 +1,42 @@
 import SwiftUI
 
 public struct FlowLayout: Layout {
-  public init() {}
+  private let proposedViewSize: ProposedViewSize
 
-  public func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
-    let sizes = subviews.map { $0.sizeThatFits(.unspecified) }
+  public init(proposedViewSize: ProposedViewSize) {
+    self.proposedViewSize = proposedViewSize
+  }
+
+  public func makeCache(subviews: Subviews) -> FlowLayoutCache {
+    FlowLayoutCache(subviews.map {
+      let size = $0.sizeThatFits(proposedViewSize)
+      let propsal = ProposedViewSize(size)
+      return FlowLayoutCache.Item(proposal: propsal, size: size)
+    })
+  }
+
+  public func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout FlowLayoutCache) -> CGSize {
+    guard !subviews.isEmpty else { return .zero }
+
+    if cacheNeedsUpdate(cache, subviews: subviews) {
+      cache = makeCache(subviews: subviews)
+    }
+
+    let items = cache.items
 
     var totalHeight: CGFloat = 0
     var totalWidth: CGFloat = 0
-
     var lineWidth: CGFloat = 0
     var lineHeight: CGFloat = 0
 
-    for size in sizes {
-      if lineWidth + size.width > proposal.width ?? 0 {
+    for index in items.indices {
+      if lineWidth + items[index].size.width > proposal.width ?? 0 {
         totalHeight += lineHeight
-        lineWidth = size.width
-        lineHeight = size.height
+        lineWidth = items[index].size.width
+        lineHeight = items[index].size.height
       } else {
-        lineWidth += size.width
-        lineHeight = max(lineHeight, size.height)
+        lineWidth += items[index].size.width
+        lineHeight = max(lineHeight, items[index].size.height)
       }
 
       totalWidth = max(totalWidth, lineWidth)
@@ -30,15 +47,16 @@ public struct FlowLayout: Layout {
     return .init(width: totalWidth, height: totalHeight)
   }
 
-  public func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
-    let sizes = subviews.map { $0.sizeThatFits(.unspecified) }
+
+  public func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout FlowLayoutCache) {
+    guard !subviews.isEmpty else { return }
 
     var lineX = bounds.minX
     var lineY = bounds.minY
     var lineHeight: CGFloat = 0
 
     for index in subviews.indices {
-      if lineX + sizes[index].width > (proposal.width ?? 0) {
+      if lineX + cache.items[index].size.width > (proposal.width ?? 0) {
         lineY += lineHeight
         lineHeight = 0
         lineX = bounds.minX
@@ -46,15 +64,32 @@ public struct FlowLayout: Layout {
 
       subviews[index].place(
         at: .init(
-          x: lineX + sizes[index].width / 2,
-          y: lineY + sizes[index].height / 2
+          x: lineX + cache.items[index].size.width / 2,
+          y: lineY + cache.items[index].size.height / 2
         ),
         anchor: .center,
-        proposal: ProposedViewSize(sizes[index])
+        proposal: cache.items[index].proposal
       )
 
-      lineHeight = max(lineHeight, sizes[index].height)
-      lineX += sizes[index].width
+      lineHeight = max(lineHeight, cache.items[index].size.height)
+      lineX += cache.items[index].size.width
     }
+  }
+
+  private func cacheNeedsUpdate(_ cache: FlowLayoutCache, subviews: Subviews) -> Bool {
+    return cache.items.count != subviews.count
+  }
+}
+
+public struct FlowLayoutCache {
+  var items: [Item]
+
+  init(_ items: [Item]) {
+    self.items = items
+  }
+
+  struct Item {
+    let proposal: ProposedViewSize
+    let size: CGSize
   }
 }

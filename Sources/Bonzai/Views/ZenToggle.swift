@@ -3,19 +3,14 @@ import SwiftUI
 public struct ZenToggle: View {
   public enum Style {
     case regular
+    case medium
     case small
 
     var size: CGSize {
       switch self {
       case .regular: CGSize(width: 38, height: 20)
+      case .medium: CGSize(width: 34, height: 17)
       case .small:   CGSize(width: 22, height: 12)
-      }
-    }
-
-    var circle: CGSize {
-      switch self {
-      case .regular: CGSize(width: 19, height: 19)
-      case .small: CGSize(width: 11, height: 11)
       }
     }
   }
@@ -52,12 +47,11 @@ public struct ZenToggle: View {
           .fill(isOnFillColor)
           .overlay(alignment: isOn ? .trailing : .leading, content: {
             Circle()
-              .frame(width: style.circle.width - 1, height: style.circle.height - 1)
               .overlay(
                 Circle()
                   .stroke(isOnColor, lineWidth: 0.5)
               )
-              .padding(.horizontal, 1)
+              .padding(1)
               .shadow(radius: 1)
           })
           .overlay {
@@ -97,8 +91,6 @@ public struct ZenToggle: View {
   }
 }
 
-
-
 struct ZenToggle_Previews: PreviewProvider {
   static var systemToggles: some View {
     VStack {
@@ -109,6 +101,9 @@ struct ZenToggle_Previews: PreviewProvider {
       Toggle(isOn: .constant(false), label: {
         Text("Default off")
       })
+      .tint(Color(.systemGreen))
+      Toggle(isOn: .constant(true), label: { })
+        .tint(Color(.systemGreen))
     }
   }
 
@@ -118,32 +113,55 @@ struct ZenToggle_Previews: PreviewProvider {
         VStack(alignment: .leading) {
           Text("System")
             .font(.headline)
+          Divider()
           systemToggles
             .toggleStyle(.switch)
         }
+        .frame(minWidth: 128)
 
         VStack(alignment: .leading) {
           Text("Regular")
             .font(.headline)
-
-          ZenToggle("",
-                    style: .regular,
-                    isOn: .constant(true)) { _ in }
-
+          Divider()
           ZenToggle("Default on",
                     style: .regular,
                     isOn: .constant(true)) { _ in }
           ZenToggle("Default off",
                     style: .regular,
                     isOn: .constant(false)) { _ in }
+          ZenToggle("",
+                    style: .regular,
+                    isOn: .constant(true)) { _ in }
         }
+        .frame(minWidth: 128)
+
+        VStack(alignment: .leading) {
+          Text("Medium")
+            .font(.headline)
+          Divider()
+          ZenToggle("Default on",
+                    style: .medium,
+                    isOn: .constant(true)) { _ in }
+          ZenToggle("Default off",
+                    style: .medium,
+                    isOn: .constant(false)) { _ in }
+          ZenToggle("",
+                    style: .medium,
+                    isOn: .constant(true)) { _ in }
+        }
+        .frame(minWidth: 128)
 
         VStack(alignment: .leading) {
           Text("Small")
             .font(.headline)
+          Divider()
           ZenToggle("Default on", style: .small, isOn: .constant(true)) { _ in }
           ZenToggle("Default off", style: .small, isOn: .constant(false)) { _ in }
+          ZenToggle("",
+                    style: .small,
+                    isOn: .constant(true)) { _ in }
         }
+        .frame(minWidth: 128)
       }
     }
     .padding()
