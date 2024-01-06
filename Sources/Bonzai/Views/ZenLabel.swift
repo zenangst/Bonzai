@@ -2,14 +2,21 @@ import SwiftUI
 
 public struct ZenLabel<Content>: View where Content: View {
   public enum Style {
-    case header
     case sidebar
+    case content
+    case detail
   }
 
   private let style: Style
+  @ViewBuilder
   private let content: () -> Content
 
-  public init(_ style: Style, content: @escaping () -> Content) {
+  public init(_ text: String, style: Style = .detail) where Content == Text {
+    self.content = { Text(text) }
+    self.style = style
+  }
+
+  public init(_ style: Style = .detail, content: @escaping () -> Content) {
     self.content = content
     self.style = style
   }
@@ -25,8 +32,8 @@ public struct ZenLabel<Content>: View where Content: View {
 
   private func font(for style: Style) -> Font {
     switch style {
-    case .header: .system(.body, design: .rounded,weight: .semibold)
-    case .sidebar: .subheadline.bold()
+    case .detail: .system(.callout, design: .rounded,weight: .semibold)
+    case .sidebar, .content: .subheadline.bold()
     }
   }
 }
