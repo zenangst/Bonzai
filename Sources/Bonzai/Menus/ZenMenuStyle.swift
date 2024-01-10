@@ -26,7 +26,7 @@ struct ZenMenuStyle: MenuStyle {
       })
       .padding(.horizontal, config.padding.horizontal.padding)
       .padding(.vertical, config.padding.vertical?.padding)
-      .frame(minHeight: 24)
+      .frame(minHeight: 16)
       .background(
         ZenStyleBackgroundView(
           cornerRadius: config.cornerRadius,

@@ -26,6 +26,7 @@ public struct ZenTextEditor: View {
   public var body: some View {
     TextEditor(text: $text)
       .scrollContentBackground(.hidden)
+      .scrollDisabled(false)
       .font(font)
       .padding([.top, .leading, .bottom], 4)
       .scrollIndicators(.hidden)

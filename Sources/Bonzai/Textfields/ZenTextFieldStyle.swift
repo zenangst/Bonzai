@@ -15,8 +15,8 @@ struct ZenTextFieldStyle: TextFieldStyle {
       configuration
         .textFieldStyle(.plain)
         .modifier(ZenTextViewModifier(config.font))
-        .padding(.horizontal, 4)
-        .padding(.vertical, 2)
+        .padding(.horizontal, config.padding.horizontal.padding)
+        .padding(.vertical, config.padding.vertical?.padding ?? 2)
         .background(
           RoundedRectangle(cornerRadius: 4 + 1.5)
             .strokeBorder(Color(config.color.nsColor), lineWidth: 1.5)

@@ -4,15 +4,14 @@ public enum ZenSize {
   case small
   case medium
   case large
+  case zero
 
   var padding: CGFloat {
     switch self {
-    case .small:
-      return 2
-    case .medium:
-      return 4
-    case .large:
-      return 6
+    case .small: 2
+    case .medium: 4
+    case .large: 6
+    case .zero: 0
     }
   }
 }

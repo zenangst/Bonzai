@@ -23,6 +23,11 @@ public struct ZenStyleConfiguration {
       self.horizontal = horizontal
       self.vertical = vertical
     }
+
+    static public var large: Padding { Padding(horizontal: .large, vertical: .large) }
+    static public var medium: Padding { Padding(horizontal: .medium, vertical: .medium) }
+    static public var small: Padding { Padding(horizontal: .small, vertical: .small) }
+    static public var zero: Padding { Padding(horizontal: .zero, vertical: .zero) }
   }
 
   public init(calm: Bool = false,

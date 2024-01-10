@@ -32,10 +32,10 @@ public struct ZenCheckbox: View {
   private let onChange: (Bool) -> Void
 
   public init(_ titleKey: String = "",
-       style: Style = .regular,
-       config: ZenStyleConfiguration = .init(),
-       isOn: Binding<Bool>,
-       onChange: @escaping (Bool) -> Void = { _ in }) {
+              style: Style = .regular,
+              config: ZenStyleConfiguration = .init(),
+              isOn: Binding<Bool>,
+              onChange: @escaping (Bool) -> Void = { _ in }) {
     _isOn = isOn
     self.config = config
     self.style = style
