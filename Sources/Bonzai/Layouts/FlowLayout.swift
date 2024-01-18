@@ -1,9 +1,18 @@
 import SwiftUI
 
 public struct FlowLayout: Layout {
+  private let padding: CGFloat
+  private let itemSpacing: CGFloat
+  private let minSize: CGSize?
   private let proposedViewSize: ProposedViewSize
 
-  public init(proposedViewSize: ProposedViewSize) {
+  public init(itemSpacing: CGFloat = 0,
+              padding: CGFloat = 0,
+              minSize: CGSize? = nil,
+              proposedViewSize: ProposedViewSize = .unspecified) {
+    self.itemSpacing = itemSpacing
+    self.padding = padding
+    self.minSize = minSize
     self.proposedViewSize = proposedViewSize
   }
 
@@ -26,40 +35,56 @@ public struct FlowLayout: Layout {
 
     var totalHeight: CGFloat = 0
     var totalWidth: CGFloat = 0
-    var lineWidth: CGFloat = 0
+    var lineWidth: CGFloat = padding
     var lineHeight: CGFloat = 0
 
     for index in items.indices {
-      if lineWidth + items[index].size.width > proposal.width ?? 0 {
+      let itemWidthWithSpacing = items[index].size.width + itemSpacing
+      if lineWidth + itemWidthWithSpacing + padding > proposal.width ?? 0 {
         totalHeight += lineHeight
-        lineWidth = items[index].size.width
+        lineWidth = itemSpacing + items[index].size.width
         lineHeight = items[index].size.height
       } else {
-        lineWidth += items[index].size.width
+        lineWidth += itemWidthWithSpacing
         lineHeight = max(lineHeight, items[index].size.height)
       }
 
-      totalWidth = max(totalWidth, lineWidth)
+      totalWidth = max(totalWidth, lineWidth + padding)
     }
 
     totalHeight += lineHeight
+    totalWidth -= padding
 
-    return .init(width: totalWidth, height: totalHeight)
+    if let minSize {
+      return .init(
+        width: min(totalWidth, minSize.width),
+        height: totalWidth > minSize.height ? totalWidth - padding : minSize.height - padding
+      )
+    } else {
+      return .init(width: totalWidth, height: totalHeight)
+    }
   }
 
-
   public func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout FlowLayoutCache) {
-    guard !subviews.isEmpty else { return }
-
-    var lineX = bounds.minX
-    var lineY = bounds.minY
+    var lineX = bounds.minX + padding
+    var lineY = bounds.minY + padding
     var lineHeight: CGFloat = 0
 
+    let maxX: CGFloat
+    if let minSize {
+      maxX = max(bounds.maxX, minSize.width) - padding
+    } else if let proposedWidth = proposal.width {
+      maxX = min(proposedWidth, bounds.maxX) - padding
+    } else {
+      maxX = bounds.maxX - padding
+    }
+
     for index in subviews.indices {
-      if lineX + cache.items[index].size.width > (proposal.width ?? 0) {
+      let itemWidthWithSpacing = cache.items[index].size.width + padding
+      if lineX + itemWidthWithSpacing + padding >= maxX {
         lineY += lineHeight
         lineHeight = 0
-        lineX = bounds.minX
+        lineX = bounds.minX + padding
       }
 
       subviews[index].place(
@@ -72,7 +97,7 @@ public struct FlowLayout: Layout {
       )
 
       lineHeight = max(lineHeight, cache.items[index].size.height)
-      lineX += cache.items[index].size.width
+      lineX += itemWidthWithSpacing
     }
   }
 
