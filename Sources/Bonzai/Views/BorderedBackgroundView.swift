@@ -3,10 +3,12 @@ import SwiftUI
 public struct BorderedOverlayView: View {
   @Environment(\.isFocused) private var isFocused
   @EnvironmentObject private var publisher: ZenColorPublisher
+  @Binding private var isSelected: Bool
   private let cornerRadius: CGFloat
   private let globalPublisher: Bool
   
-  public init(cornerRadius: CGFloat, globalPublisher: Bool = true) {
+  public init(_ isSelected: Binding<Bool> = .constant(false), cornerRadius: CGFloat, globalPublisher: Bool = true) {
+    _isSelected = isSelected
     self.cornerRadius = cornerRadius
     self.globalPublisher = globalPublisher
   }
@@ -20,7 +22,13 @@ public struct BorderedOverlayView: View {
         .strokeBorder(Color(nsColor: color.nsColor).opacity(0.5), lineWidth: 1.5)
         .padding(1.5)
     }
-    .opacity(isFocused ? 1 : 0)
+    .opacity(opacity())
     .allowsHitTesting(false)
+  }
+
+  private func opacity() -> Double {
+    if isFocused { 1 }
+    else if isSelected { 0.3 }
+    else { 0 }
   }
 }
