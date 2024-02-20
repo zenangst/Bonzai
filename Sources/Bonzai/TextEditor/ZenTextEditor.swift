@@ -9,18 +9,21 @@ public struct ZenTextEditor: View {
   private let color: ZenColor
   private let font: Font
   private let placeholder: String
+  private let onFocusChange: ((Bool) -> Void)?
   private let onCommandReturnKey: (() -> Void)?
 
   public init(color: ZenColor = .accentColor,
               text: Binding<String>,
               placeholder: String,
               font: Font = .body,
+              onFocusChange: ((Bool) -> Void)? = nil,
               onCommandReturnKey: (() -> Void)? = nil) {
     _text = text
     self.color = color
     self.placeholder = placeholder
     self.font = font
     self.onCommandReturnKey = onCommandReturnKey
+    self.onFocusChange = onFocusChange
   }
 
   public var body: some View {
@@ -67,6 +70,9 @@ public struct ZenTextEditor: View {
 
       )
       .onHover(perform: { newValue in  withAnimation(.easeInOut(duration: 0.2)) { isHovered = newValue } })
+      .onChange(of: isFocused, perform: { value in
+        onFocusChange?(value)
+      })
       .focused($isFocused)
   }
 }
