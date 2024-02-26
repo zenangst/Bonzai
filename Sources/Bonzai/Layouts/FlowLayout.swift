@@ -24,74 +24,123 @@ public struct FlowLayout: Layout {
     })
   }
 
-  public func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout FlowLayoutCache) -> CGSize {
-    guard !subviews.isEmpty else { return .zero }
+  public func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, 
+                           cache: inout FlowLayoutCache) -> CGSize {
+    guard !subviews.isEmpty,
+          let proposalWidth = proposal.width, proposalWidth > 0 else { return .zero }
 
     if cacheNeedsUpdate(cache, subviews: subviews) {
       cache = makeCache(subviews: subviews)
     }
 
-    guard var proposalWidth = proposal.width,
-          proposalWidth > 0 else {
-      return .zero
-    }
-
-    var totalHeight: CGFloat = 0
-    var x: CGFloat = 0
-    var y: CGFloat = cache.items.first?.size.height ?? 0
-
-    if !cache.items.isEmpty {
-      proposalWidth -= itemSpacing
-    }
+    var totalWidth: CGFloat = 0
+    var totalHeight: CGFloat = (cache.items.first?.size.height ?? 0) + (lineSpacing * 2)
+    var lineWidth: CGFloat = 0
+    var lineHeight: CGFloat = 0
 
     for item in cache.items {
-      x += item.size.width
-
-      if x > proposalWidth {
-        x = item.size.width
-        y += item.size.height + lineSpacing
+      let size = item.size
+      if lineWidth + size.width > proposal.width ?? 0 {
+        lineHeight = size.height + lineSpacing
+        lineWidth = size.width + itemSpacing
+        totalHeight += lineHeight
       } else {
-        x += itemSpacing
+        lineWidth += size.width + itemSpacing
+        lineHeight = max(lineHeight, size.height + lineSpacing)
       }
+
+      totalWidth = max(totalWidth, lineWidth)
     }
 
-    totalHeight = y
-
-    return CGSize(width: proposalWidth, height: totalHeight)
+    return CGSize(width: totalWidth, height: totalHeight)
   }
 
-  public func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout FlowLayoutCache) {
-    var x: CGFloat = bounds.minX
-    var y: CGFloat = bounds.minY
-    var lineHeight: CGFloat = y
+  public func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, 
+                            subviews: Subviews, cache: inout FlowLayoutCache) {
+    var x: CGFloat = bounds.minX + itemSpacing / 2
+    var y: CGFloat = bounds.minY + lineSpacing
 
-    let maxX: CGFloat = if let minSize {
-      max(bounds.maxX, minSize.width)
-    } else {
-      bounds.maxX
-    }
+    var dynamicItemSpacing: CGFloat = 0
+    var firstRowMaxIndex = 0
+    var lineHeight: CGFloat = 0
+    var hasPositionedFirstRow = false
 
     for index in subviews.indices {
-      let itemSize = cache.items[index].size
-      if x + itemSize.width > maxX {
-        lineHeight += itemSize.height + lineSpacing
-        x = bounds.minX
-        y = lineHeight
+      if firstRowMaxIndex == 0 {
+        let dynamicWidth = dynamicItemSpacing + cache.items[index].size.width
+        if dynamicWidth <= bounds.width {
+          dynamicItemSpacing += cache.items[index].size.width + itemSpacing
+        } else {
+          dynamicItemSpacing = (bounds.width - dynamicItemSpacing) / CGFloat(max(index, 1)) + itemSpacing
+          firstRowMaxIndex = index
+        }
+
+        if index == subviews.indices.count - 1 {
+          for index in subviews.indices {
+            positionItem(
+              x: &x, y: &y,
+              item: cache.items[index],
+              bounds: bounds, 
+              itemSpacing: itemSpacing,
+              lineHeight: &lineHeight,
+              subviews: subviews, index: index
+            )
+          }
+        }
+      } else {
+        if !hasPositionedFirstRow {
+          for index in 0...firstRowMaxIndex {
+            positionItem(
+              x: &x, y: &y,
+              item: cache.items[index],
+              bounds: bounds,
+              itemSpacing: dynamicItemSpacing,
+              lineHeight: &lineHeight,
+              subviews: subviews, index: index
+            )
+          }
+          hasPositionedFirstRow = true
+        }
+
+        positionItem(
+          x: &x, y: &y,
+          item: cache.items[index],
+          bounds: bounds, 
+          itemSpacing: dynamicItemSpacing,
+          lineHeight: &lineHeight,
+          subviews: subviews, index: index
+        )
       }
-
-      subviews[index].place(
-        at: .init(x: x, y: y),
-        proposal: cache.items[index].proposal
-      )
-
-      x += cache.items[index].size.width + itemSpacing
     }
   }
 
-  public static var layoutProperties: LayoutProperties {
-    var properties = LayoutProperties()
-    properties.stackOrientation = .horizontal
-    return properties
+  fileprivate func positionItem(x: inout CGFloat, y: inout CGFloat,
+                                item: FlowLayoutCache.Item, bounds: CGRect,
+                                itemSpacing: CGFloat, lineHeight: inout CGFloat,
+                                subviews: FlowLayout.Subviews,
+                                index: Range<LayoutSubviews.Index>.Element) {
+    if x >= bounds.width - itemSpacing {
+      x = bounds.minX + itemSpacing / 2
+      y += lineHeight + lineSpacing
+    }
+
+    let origin = CGPoint(x: x, y: y)
+    subviews[index].place(at: origin, proposal: item.proposal)
+
+    let width: CGFloat
+    let height: CGFloat
+
+
+    if let minSize {
+      width = min(minSize.width, item.size.width)
+      height = min(minSize.height, item.size.height)
+    } else {
+      width = item.size.width
+      height = item.size.height
+    }
+
+    x += width + itemSpacing
+    lineHeight = max(lineHeight, height)
   }
 
   private func cacheNeedsUpdate(_ cache: FlowLayoutCache, subviews: Subviews) -> Bool {
@@ -106,7 +155,7 @@ public struct FlowLayoutCache {
     self.items = items
   }
 
-  struct Item {
+  struct Item: Equatable {
     let proposal: ProposedViewSize
     let size: CGSize
   }
