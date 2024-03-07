@@ -16,6 +16,10 @@ public struct FlowLayout: Layout {
     self.proposedViewSize = proposedViewSize
   }
 
+  public func updateCache(_ cache: inout FlowLayoutCache, subviews: Subviews) {
+    cache = makeCache(subviews: subviews)
+  }
+
   public func makeCache(subviews: Subviews) -> FlowLayoutCache {
     FlowLayoutCache(subviews.map {
       let size = $0.sizeThatFits(proposedViewSize)
@@ -28,10 +32,6 @@ public struct FlowLayout: Layout {
                            cache: inout FlowLayoutCache) -> CGSize {
     guard !subviews.isEmpty,
           let proposalWidth = proposal.width, proposalWidth > 0 else { return .zero }
-
-    if cacheNeedsUpdate(cache, subviews: subviews) {
-      cache = makeCache(subviews: subviews)
-    }
 
     var totalWidth: CGFloat = 0
     var totalHeight: CGFloat = (cache.items.first?.size.height ?? 0) + (lineSpacing * 2)
@@ -141,10 +141,6 @@ public struct FlowLayout: Layout {
 
     x += width + itemSpacing
     lineHeight = max(lineHeight, height)
-  }
-
-  private func cacheNeedsUpdate(_ cache: FlowLayoutCache, subviews: Subviews) -> Bool {
-    return cache.items.count != subviews.count
   }
 }
 
