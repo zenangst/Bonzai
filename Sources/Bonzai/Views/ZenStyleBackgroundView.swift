@@ -18,14 +18,17 @@ struct ZenStyleBackgroundView: View {
           .stroke(strokeColor(), lineWidth: 1)
           .offset(y: 0.25)
       )
+      .drawingGroup()
       .opacity(opacity())
-      .opacity(calm && isHovered == false ? 0 : 1)
   }
 
   private func opacity() -> CGFloat {
-    isHovered
-    ? 1.0
-    : colorScheme == .light ? 0.7 : 0.3
+    if calm && isHovered == false {
+      return 0
+    }
+
+    return isHovered ? 1.0
+                     : colorScheme == .light ? 0.7 : 0.3
   }
 
   private func strokeColor() -> Color {

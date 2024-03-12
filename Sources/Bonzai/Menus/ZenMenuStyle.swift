@@ -1,38 +1,53 @@
 import SwiftUI
 
 struct ZenMenuStyle: MenuStyle {
-  @Environment(\.controlActiveState) var controlActiveState
-  @Environment(\.colorScheme) var colorScheme
-  @State private var isHovered: Bool
-  @Binding private var hoverEffect: Bool
-
-  private let config: ZenStyleConfiguration
+  private let zenConfiguration: ZenStyleConfiguration
 
   init(_ config: ZenStyleConfiguration) {
-    self.config = config
-    _isHovered = .init(initialValue: config.hoverEffect.wrappedValue ? false : true)
-    _hoverEffect = config.hoverEffect
+    self.zenConfiguration = config
   }
 
   func makeBody(configuration: Configuration) -> some View {
-    Menu(configuration)
+    ZenMenuStyleInternalView(configuration, zenConfiguration: zenConfiguration)
+  }
+}
+
+struct ZenMenuStyleInternalView: View {
+  @Environment(\.controlActiveState) private var controlActiveState
+  @Environment(\.colorScheme) private var colorScheme
+
+  private let menuConfiguration: MenuStyleConfiguration
+  private let zenConfiguration: ZenStyleConfiguration
+  @State private var isHovered: Bool
+  @Binding private var hoverEffect: Bool
+
+  init(_ menuConfiguration: MenuStyleConfiguration,
+       zenConfiguration: ZenStyleConfiguration) {
+    self.menuConfiguration = menuConfiguration
+    self.zenConfiguration = zenConfiguration
+    _isHovered = .init(initialValue: zenConfiguration.hoverEffect.wrappedValue ? false : true)
+    _hoverEffect = zenConfiguration.hoverEffect
+  }
+
+  var body: some View {
+    Menu(menuConfiguration)
       .menuStyle(.borderlessButton)
       .truncationMode(.middle)
       .allowsTightening(true)
       .foregroundColor(Color(.textColor))
       .onHover(perform: { value in
-        guard config.hoverEffect.wrappedValue else { return }
+        guard zenConfiguration.hoverEffect.wrappedValue else { return }
         self.isHovered = value
       })
-      .padding(.horizontal, config.padding.horizontal.padding)
-      .padding(.vertical, config.padding.vertical?.padding)
+      .padding(.horizontal, zenConfiguration.padding.horizontal.padding)
+      .padding(.vertical, zenConfiguration.padding.vertical?.padding)
       .frame(minHeight: 16)
       .background(
         ZenStyleBackgroundView(
-          cornerRadius: config.cornerRadius,
-          calm: config.calm,
+          cornerRadius: zenConfiguration.cornerRadius,
+          calm: zenConfiguration.calm,
           isHovered: $isHovered,
-          nsColor: config.color.nsColor
+          nsColor: zenConfiguration.color.nsColor
         )
       )
       .grayscale(grayscale())
@@ -46,16 +61,17 @@ struct ZenMenuStyle: MenuStyle {
   }
 
   private func grayscale() -> CGFloat {
-    config.grayscaleEffect.wrappedValue ? isHovered ? 0 
+    zenConfiguration.grayscaleEffect.wrappedValue ? isHovered ? 0
     : isHovered ? 0.5 : 1
     : controlActiveState == .key ? 0 : 0.4
   }
 
   private func opacity() -> CGFloat {
-    isHovered 
+    isHovered
     ? 1.0
     : colorScheme == .light ? 1 : 0.8
   }
+
 }
 
 struct ZenMenuStyle_Previews: PreviewProvider {

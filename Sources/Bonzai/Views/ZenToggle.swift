@@ -38,7 +38,10 @@ public struct ZenToggle: View {
 
   public var body: some View {
     HStack {
-      if !titleKey.isEmpty { Text(titleKey) }
+      if !titleKey.isEmpty {
+        Text(titleKey)
+          .opacity(!titleKey.isEmpty ? 1 : 0)
+      }
       Button(action: {
         isOn.toggle()
         onChange(isOn)

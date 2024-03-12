@@ -2,11 +2,11 @@ import Combine
 import SwiftUI
 
 public struct IconView: View {
-  private let icon: Icon
+  private let icon: Icon?
   private let size: CGSize
   @State private var nsImage: NSImage?
 
-  public init(icon: Icon, size: CGSize) {
+  public init(icon: Icon?, size: CGSize) {
     self.icon = icon
     self.size = size
   }
@@ -18,14 +18,16 @@ public struct IconView: View {
           .aspectRatio(contentMode: .fill)
       } else {
         Color.clear
-          .task(id: icon.path) {
-            nsImage = try? await nsImage(for: icon.path, ofSize: size)
-          }
       }
     }
     .frame(width: size.width, height: size.height)
     .fixedSize()
     .drawingGroup()
+    .task(id: icon?.path ?? "") {
+      if let icon = icon {
+        nsImage = try? await nsImage(for: icon.path, ofSize: size)
+      }
+    }
   }
 
   private func nsImage(for path: String, ofSize size: CGSize) async throws -> NSImage {
