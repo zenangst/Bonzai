@@ -2,8 +2,9 @@ import Combine
 import SwiftUI
 
 public struct IconView: View {
-  let icon: Icon
-  let size: CGSize
+  private let icon: Icon
+  private let size: CGSize
+  @State private var nsImage: NSImage?
 
   public init(icon: Icon, size: CGSize) {
     self.icon = icon
@@ -11,19 +12,33 @@ public struct IconView: View {
   }
 
   public var body: some View {
-    InternalIconView(icon, size: size) { phase in
-      if case .success(let image) = phase {
-        image
-          .resizable()
+    Group {
+      if let nsImage {
+        Image(nsImage: nsImage)
+          .aspectRatio(contentMode: .fill)
       } else {
-        RoundedRectangle(cornerRadius: 4)
-          .fill(Color.clear)
+        Color.clear
+          .task(id: icon.path) {
+            nsImage = try? await nsImage(for: icon.path, ofSize: size)
+          }
       }
     }
-    .aspectRatio(contentMode: .fill)
     .frame(width: size.width, height: size.height)
     .fixedSize()
     .drawingGroup()
+  }
+
+  private func nsImage(for path: String, ofSize size: CGSize) async throws -> NSImage {
+    let image = NSWorkspace.shared.icon(forFile: path)
+    try Task.checkCancellation()
+    if let imageRep = image.bestRepresentation(for: .init(origin: .zero, size: size), context: nil, hints: nil) {
+      let repImage = NSImage(size: size)
+      repImage.addRepresentation(imageRep)
+      try Task.checkCancellation()
+      return repImage
+    } else {
+      return image
+    }
   }
 }
 
@@ -32,68 +47,5 @@ struct IconView_Previews: PreviewProvider {
     IconView(icon: .init(bundleIdentifier: "com.apple.finder.",
                          path: "/System/Library/CoreServices/Finder.app"),
              size: .init(width: 32, height: 32))
-  }
-}
-
-fileprivate final class IconLoader: ObservableObject {
-  @MainActor
-  @Published var phase = AsyncImagePhase.empty
-
-  private var task: Task<(), Error>? {
-    willSet {
-      self.task?.cancel()
-    }
-  }
-  private let icon: Icon
-
-  init(_ icon: Icon) {
-    self.icon = icon
-  }
-
-  deinit {
-    task?.cancel()
-  }
-
-  @MainActor
-  func load(with size: CGSize) {
-    task = Task {
-      if let nsImage = await IconCache.shared.image(for: icon, size: size) {
-        phase = .success(Image(nsImage: nsImage))
-      } else {
-        await internalLoad(size)
-      }
-    }
-  }
-
-  private func internalLoad(_ size: CGSize) async {
-    self.task?.cancel()
-    guard let nsImage = await IconCache.shared.image(for: icon, size: size)
-    else { return }
-
-    let image = Image(nsImage: nsImage)
-    await MainActor.run {
-      phase = .success(image)
-    }
-  }
-}
-
-fileprivate struct InternalIconView<Content>: View where Content: View {
-  @ObservedObject var loader: IconLoader
-  @ViewBuilder private var content: (AsyncImagePhase) -> Content
-  private let size: CGSize
-
-  init(_ icon: Icon,
-       size: CGSize,
-       @ViewBuilder content: @escaping (AsyncImagePhase) -> Content) {
-    _loader = .init(wrappedValue: IconLoader(icon))
-    self.size = size
-    self.content = content
-  }
-
-  var body: some View {
-    content(loader.phase)
-      .onAppear {
-        loader.load(with: size)
-      }
   }
 }
