@@ -36,6 +36,7 @@ public struct IconView: View {
     if let imageRep = image.bestRepresentation(for: .init(origin: .zero, size: size), context: nil, hints: nil) {
       let repImage = NSImage(size: size)
       repImage.addRepresentation(imageRep)
+      try await Task.sleep(for: .milliseconds(25))
       try Task.checkCancellation()
       return repImage
     } else {

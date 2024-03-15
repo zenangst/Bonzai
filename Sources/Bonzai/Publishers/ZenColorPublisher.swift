@@ -1,6 +1,6 @@
 import SwiftUI
 
-public final class ZenColorPublisher: ObservableObject {
+public final class ZenColorPublisher: ObservableObject, @unchecked Sendable {
   @Published public private(set) var color: ZenColor
   public static let shared: ZenColorPublisher = .init()
 
