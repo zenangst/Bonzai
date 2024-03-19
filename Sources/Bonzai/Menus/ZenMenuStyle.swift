@@ -33,8 +33,8 @@ struct ZenMenuStyleInternalView: View {
     Menu(menuConfiguration)
       .menuStyle(.borderlessButton)
       .truncationMode(.middle)
+      .foregroundStyle(foregroundStyle())
       .allowsTightening(true)
-      .foregroundColor(Color(.textColor))
       .onHover(perform: { value in
         guard zenConfiguration.hoverEffect.wrappedValue else { return }
         self.isHovered = value
@@ -52,12 +52,24 @@ struct ZenMenuStyleInternalView: View {
       )
       .grayscale(grayscale())
       .compositingGroup()
-      .shadow(color: Color.black.opacity(isHovered ? 0.5 : 0),
+      .shadow(color: Color.black.opacity(shadowOpacity()),
               radius: isHovered ? 1 : 1.25,
               y: isHovered ? 2 : 3)
       .opacity(opacity())
       .animation(.easeOut(duration: 0.2), value: isHovered)
       .contentShape(Rectangle())
+  }
+
+  private func foregroundStyle() -> Color {
+    isHovered
+    ? Color(.white)
+    : Color(colorScheme == .dark ? .textColor : .textColor)
+  }
+
+  private func shadowOpacity() -> CGFloat {
+    isHovered 
+    ? colorScheme == .dark ? 0.5 : 0.1
+    : 0
   }
 
   private func grayscale() -> CGFloat {

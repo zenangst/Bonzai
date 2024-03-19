@@ -19,7 +19,7 @@ struct ZenButtonStyle: ButtonStyle {
     configuration.label
       .padding(.vertical, config.padding.vertical?.padding)
       .padding(.horizontal, config.padding.horizontal.padding * 1.5)
-      .foregroundColor(Color( colorScheme == .dark ? .textColor : .white))
+      .foregroundColor(foregroundColor())
       .background(
         ZenStyleBackgroundView(
           cornerRadius: config.cornerRadius,
@@ -75,6 +75,12 @@ struct ZenButtonStyle: ButtonStyle {
   }
 
   // MARK: - Private methods
+
+  private func foregroundColor() -> Color {
+    isHovered 
+    ? Color(.white)
+    : Color(colorScheme == .dark ? .textColor : .textColor)
+  }
 
   private func focusOverlayOpacity() -> CGFloat {
     (isFocused && config.focusEffect.wrappedValue && controlActiveState == .key)

@@ -24,6 +24,7 @@ public struct ZenCheckbox: View {
     }
   }
 
+  @Environment(\.colorScheme) private var colorScheme
   @State var isHovered: Bool = false
   @Binding private var isOn: Bool
   private let config: ZenStyleConfiguration
@@ -50,10 +51,14 @@ public struct ZenCheckbox: View {
     }, label: {
       RoundedRectangle(cornerRadius: 4, style: .continuous)
         .fill(isOnColor)
+        .overlay(content: {
+          RoundedRectangle(cornerRadius: 4, style: .continuous)
+            .stroke(Color(nsColor: .windowFrameTextColor).opacity(0.2), lineWidth: 1.0)
+        })
         .overlay {
           Image(systemName: "checkmark")
             .symbolRenderingMode(.palette)
-            .foregroundStyle(.white.opacity(0.8))
+            .foregroundStyle(checkmarkColor())
             .font(Font.system(size: style.fontSize, weight: .heavy))
             .offset(y: isOn || isHovered ? 0 : -8)
             .opacity(isOn ? 1 : isHovered ? 0.5 : 0)
@@ -73,10 +78,16 @@ public struct ZenCheckbox: View {
     .buttonStyle(.plain)
   }
 
-  var isOnColor: Color {
+  private var isOnColor: Color {
     isOn
     ? Color(nsColor: config.color.nsColor.blended(withFraction: 0.2, of: .black)!)
-    : Color(nsColor: .controlColor)
+    : colorScheme == .dark ? Color(nsColor: .controlColor) : Color(nsColor: .windowBackgroundColor)
+  }
+
+  private func checkmarkColor() -> Color {
+    colorScheme == .dark
+    ? .white.opacity(0.8)
+    : .black.opacity(0.4)
   }
 }
 

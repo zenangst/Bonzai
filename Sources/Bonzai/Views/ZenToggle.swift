@@ -16,6 +16,7 @@ public struct ZenToggle: View {
   }
 
   @Environment(\.controlActiveState) var controlActiveState
+  @Environment(\.colorScheme) var colorScheme
   @Binding private var isOn: Bool
   @State private var isHovered: Bool
   private let style: Style
@@ -50,6 +51,7 @@ public struct ZenToggle: View {
           .fill(isOnFillColor)
           .overlay(alignment: isOn ? .trailing : .leading, content: {
             Circle()
+              .fill(Color(.white))
               .overlay(
                 Circle()
                   .stroke(isOnColor, lineWidth: 0.5)
@@ -84,13 +86,15 @@ public struct ZenToggle: View {
   var isOnFillColor: Color {
     isOn
     ? Color(nsColor: config.color.nsColor.blended(withFraction: 0.2, of: .black)!)
-    : Color(nsColor: .controlColor)
+    : Color(nsColor: .systemGray).opacity(0.2)
   }
 
   var isOnColor: Color {
     isOn
     ? Color(nsColor: config.color.nsColor.blended(withFraction: 0.25, of: .black)!)
-    : Color(nsColor: .windowBackgroundColor)
+    : colorScheme == .dark
+      ? Color(nsColor: .windowBackgroundColor)
+    : Color(nsColor: .systemGray).opacity(0.4)
   }
 }
 

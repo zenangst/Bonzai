@@ -23,12 +23,19 @@ struct ZenRoundedContainer: ViewModifier {
       )
       .background(
         RoundedRectangle(cornerRadius: cornerRadius + 1)
-          .stroke(Color(nsColor: .controlColor).opacity(0.4), lineWidth: 1)
+          .stroke(borderColor(), lineWidth: 1)
           .padding(-1)
       )
       .compositingGroup()
-      .shadow(color: shadowColor(), radius: 2, y: 1)
+      .shadow(color: shadowColor(), radius: 2, y: 2)
       .padding(margin)
+  }
+
+  private func borderColor() -> Color {
+    colorScheme == .dark
+    ? Color(nsColor: .controlColor).opacity(0.4)
+    : Color(nsColor: .systemGray).opacity(0.2)
+
   }
 
   private func background() -> Color? {
@@ -49,4 +56,16 @@ public extension View {
     self
       .modifier(ZenRoundedContainer(cornerRadius: cornerRadius, padding: padding, margin: margin))
   }
+}
+
+#Preview {
+    VStack {
+       Text("Light Mode")
+            .roundedContainer()
+            .environment(\.colorScheme, .light)
+
+        Text("Dark Mode")
+            .roundedContainer()
+            .environment(\.colorScheme, .dark)
+    }
 }

@@ -11,6 +11,7 @@ struct ZenStyleBackgroundView: View {
     RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
       .fill(LinearGradient(
         stops: Gradient.Stop.zen(colorScheme,
+                                 isHovered: isHovered,
                                  nsColor: nsColor),
         startPoint: .top, endPoint: .bottom))
       .background(
@@ -18,7 +19,6 @@ struct ZenStyleBackgroundView: View {
           .stroke(strokeColor(), lineWidth: 1)
           .offset(y: 0.25)
       )
-      .drawingGroup()
       .opacity(opacity())
   }
 
@@ -35,7 +35,7 @@ struct ZenStyleBackgroundView: View {
     if colorScheme == .dark {
       Color(nsColor: .shadowColor).opacity(0.2)
     } else {
-      Color(nsColor: nsColor).opacity(0.2)
+      Color(nsColor: .shadowColor).opacity(0.2)
     }
   }
 }
