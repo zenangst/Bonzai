@@ -73,6 +73,7 @@ public struct ZenCheckbox: View {
       if !titleKey.isEmpty {
         Text(titleKey)
           .frame(alignment: .leading)
+          .lineLimit(1)
       }
     })
     .buttonStyle(.plain)

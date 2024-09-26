@@ -15,7 +15,12 @@ struct ZenRoundedContainer: ViewModifier {
   func body(content: Content) -> some View {
     content
       .padding(padding)
-      .background(background())
+      .background(
+          LinearGradient(stops: [
+            .init(color: background(fraction: 0.015, of: .white), location: 0),
+            .init(color: background(fraction: 0.015, of: .black), location: 1)
+          ], startPoint: .top, endPoint: .bottom)
+      )
       .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
       .background(
         RoundedRectangle(cornerRadius: cornerRadius)
@@ -38,10 +43,10 @@ struct ZenRoundedContainer: ViewModifier {
 
   }
 
-  private func background() -> Color? {
+  private func background(fraction: CGFloat = 0.0, of color: NSColor = .clear) -> Color {
     colorScheme == .dark
-    ? Color(nsColor: .underPageBackgroundColor)
-    : Color(nsColor: .alternateSelectedControlTextColor)
+    ? Color(nsColor: .underPageBackgroundColor.blended(withFraction: fraction, of: color)!)
+    : Color(nsColor: .alternateSelectedControlTextColor.blended(withFraction: fraction, of: color)!)
   }
 
   private func shadowColor() -> Color {
