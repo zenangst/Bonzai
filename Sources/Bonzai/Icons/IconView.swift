@@ -22,7 +22,6 @@ public struct IconView: View {
     }
     .frame(width: size.width, height: size.height)
     .fixedSize()
-    .drawingGroup()
     .task(id: icon?.path ?? "") {
       if let icon = icon {
         nsImage = try? await nsImage(for: icon.path, ofSize: size)

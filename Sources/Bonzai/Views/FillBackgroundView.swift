@@ -21,6 +21,5 @@ public struct FillBackgroundView: View {
                : 0)
       .cornerRadius(4.0)
       .contentShape(Rectangle())
-      .drawingGroup()
   }
 }

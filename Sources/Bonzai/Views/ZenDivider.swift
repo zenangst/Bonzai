@@ -12,11 +12,9 @@ public struct ZenDivider: View {
     switch axis {
     case .horizontal:
       VStack(spacing: 0, content: { content(firstColor: darkerColor(), secondColor: lighterColor()) })
-        .drawingGroup()
     case .vertical:
       HStack(spacing: 0, content: { content(firstColor: lighterColor(),
                                             secondColor: darkerColor()) })
-        .drawingGroup()
     }
   }
 

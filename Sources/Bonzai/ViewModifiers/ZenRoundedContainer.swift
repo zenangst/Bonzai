@@ -40,7 +40,6 @@ struct ZenRoundedContainer: ViewModifier {
     colorScheme == .dark
     ? Color(nsColor: .controlColor).opacity(0.4)
     : Color(nsColor: .systemGray).opacity(0.2)
-
   }
 
   private func background(fraction: CGFloat = 0.0, of color: NSColor = .clear) -> Color {
