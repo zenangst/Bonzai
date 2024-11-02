@@ -17,4 +17,8 @@ open class ZenSwiftUIWindow<Content>: NSWindow where Content: View {
                           content: @autoclosure () -> Content) {
     self.init(contentRect: contentRect, styleMask: style, content: content)
   }
+
+  public func sizeThatFits(in size: CGSize) -> CGSize {
+    hostingController.sizeThatFits(in: size)
+  }
 }
