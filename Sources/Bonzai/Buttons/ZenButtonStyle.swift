@@ -102,7 +102,7 @@ struct ZenButtonStyle: ButtonStyle {
   private func opacity() -> CGFloat {
     isHovered
     ? 1.0
-    : colorScheme == .light ? 1 : 0.8
+      : colorScheme == .light ? (config.calm ? 0.8 : 1) : (config.calm ? 0.4 : 0.8)
   }
 }
 
