@@ -1,16 +1,6 @@
 import SwiftUI
 
-public struct ZenSwiftUIWindowOverrides {
-  public var canBecomeKey: Bool
-  public var canBecomeMain: Bool
-
-  public init(canBecomeKey: Bool, canBecomeMain: Bool) {
-    self.canBecomeKey = canBecomeKey
-    self.canBecomeMain = canBecomeMain
-  }
-}
-
-open class ZenSwiftUIWindow<Content>: NSWindow where Content: View {
+open class ZenSwiftUIPanel<Content>: NSPanel where Content: View {
   public let hostingController: NSHostingController<Content>
   public var overrides: ZenSwiftUIWindowOverrides
 
@@ -35,6 +25,7 @@ open class ZenSwiftUIWindow<Content>: NSWindow where Content: View {
   public func sizeThatFits(in size: CGSize) -> CGSize {
     hostingController.sizeThatFits(in: size)
   }
+
 
   open override var canBecomeKey: Bool { overrides.canBecomeKey }
   open override var canBecomeMain: Bool { overrides.canBecomeMain }
