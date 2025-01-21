@@ -7,4 +7,3 @@ public extension AnyTransition {
                 removal: .opacity.combined(with: .scale(scale: 0.1)))
   }
 }
-

@@ -21,7 +21,6 @@ public struct IconView: View {
       }
     }
     .frame(width: size.width, height: size.height)
-    .drawingGroup()
     .fixedSize()
     .task(id: icon?.path ?? "") {
       if let icon = icon {
