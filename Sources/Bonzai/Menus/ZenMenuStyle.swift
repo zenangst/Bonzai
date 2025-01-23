@@ -32,6 +32,7 @@ struct ZenMenuStyleInternalView: View {
   var body: some View {
     Menu(menuConfiguration)
       .menuStyle(.borderlessButton)
+      .buttonStyle(.plain)
       .truncationMode(.middle)
       .foregroundStyle(foregroundStyle())
       .allowsTightening(true)

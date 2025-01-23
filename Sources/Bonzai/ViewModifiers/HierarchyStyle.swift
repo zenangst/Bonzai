@@ -36,14 +36,14 @@ public struct HierarchyStyleViewModifier: ViewModifier {
 
     func padding(in section: Section) -> (horizontal: CGFloat, vertical: CGFloat) {
       switch (section, self) {
-      case (.sidebar, .root):      (horizontal: 12, vertical: 2)
+      case (.sidebar, .root):      (horizontal: 12, vertical: 0)
       case (.sidebar, .primary):   (horizontal: 10, vertical: 4)
       case (.sidebar, .secondary): (horizontal: 4, vertical: 0)
       case (.sidebar, .tertiary):  (horizontal: 4, vertical: 0)
       case (.sidebar, .item):      (horizontal: 8, vertical: 4)
       case (.sidebar, .subItem):   (horizontal: 4, vertical: 0)
 
-      case (.content, .root):      (horizontal: 12, vertical: 4)
+      case (.content, .root):      (horizontal: 12, vertical: 14)
       case (.content, .primary):   (horizontal: 10, vertical: 0)
       case (.content, .secondary): (horizontal: 4, vertical: 0)
       case (.content, .tertiary):  (horizontal: 0, vertical: 0)
@@ -101,6 +101,8 @@ public struct HierarchyStyleViewModifier: ViewModifier {
         content
           .padding(.top, level.padding(in: section).vertical)
           .padding(.bottom, nextLevel(level).padding(in: section).vertical)
+          .buttonStyle(.calm(color: .accentColor, padding: .small))
+          .menuStyle(.zen(.init(calm: true)))
       case .primary:
         content
           .padding(.horizontal, level.padding(in: section).horizontal)
@@ -117,6 +119,7 @@ public struct HierarchyStyleViewModifier: ViewModifier {
         content
           .padding(.horizontal, level.padding(in: section).horizontal)
           .padding(.vertical, level.padding(in: section).vertical)
+          .menuStyle(.zen(.init(calm: true, padding: .small)))
       case .subItem:
         content
           .padding(.horizontal, level.padding(in: section).horizontal)
