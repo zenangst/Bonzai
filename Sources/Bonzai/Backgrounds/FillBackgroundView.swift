@@ -2,7 +2,7 @@ import SwiftUI
 
 public struct FillBackgroundView: View {
   @Environment(\.isFocused) private var isFocused
-  @EnvironmentObject private var publisher: ZenColorPublisher
+  @EnvironmentObject private var publisher: ColorPublisher
   @Binding private var isSelected: Bool
   private let globalPublisher: Bool
 
@@ -12,8 +12,8 @@ public struct FillBackgroundView: View {
   }
 
   public var body: some View {
-    let color = globalPublisher ? ZenColorPublisher.shared.color : publisher.color
-    Color(nsColor: color.nsColor)
+    let color = globalPublisher ? ColorPublisher.shared.color : publisher.color
+    color
       .opacity(isFocused
                ? 0.5
                : isSelected

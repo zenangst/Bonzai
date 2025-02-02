@@ -1,15 +1,18 @@
 import SwiftUI
 
-struct ZenRoundedContainer: ViewModifier {
+struct RoundedContainer: ViewModifier {
   @Environment(\.colorScheme) var colorScheme
   private let cornerRadius: CGFloat
-  private let padding: CGFloat
-  private let margin: CGFloat
+  private let padding: EdgeInsets
 
-  init(cornerRadius: CGFloat, padding: CGFloat, margin: CGFloat) {
+  init(cornerRadius: CGFloat, padding: CGFloat) {
+    self.cornerRadius = cornerRadius
+    self.padding = EdgeInsets(top: padding, leading: padding, bottom: padding, trailing: padding)
+  }
+
+  init(cornerRadius: CGFloat, padding: EdgeInsets) {
     self.cornerRadius = cornerRadius
     self.padding = padding
-    self.margin = margin
   }
 
   func body(content: Content) -> some View {
@@ -22,18 +25,21 @@ struct ZenRoundedContainer: ViewModifier {
           ], startPoint: .top, endPoint: .bottom)
       )
       .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
-      .background(
-        RoundedRectangle(cornerRadius: cornerRadius)
-          .stroke(Color(nsColor: .controlColor).opacity(0.2), lineWidth: 3)
+      .overlay(
+        RoundedRectangle(cornerRadius: cornerRadius - 1)
+          .stroke(Color(nsColor: .controlColor).opacity(0.2), lineWidth: 2)
+          .padding(1)
+          .allowsHitTesting(false)
       )
-      .background(
-        RoundedRectangle(cornerRadius: cornerRadius + 1)
+      .overlay(
+        RoundedRectangle(cornerRadius: cornerRadius - 1)
           .stroke(borderColor(), lineWidth: 1)
-          .padding(-1)
+          .padding(1.5)
+          .allowsHitTesting(false)
       )
       .compositingGroup()
       .shadow(color: shadowColor(), radius: 2, y: 2)
-      .padding(margin)
+      .padding(.horizontal, 2)
   }
 
   private func borderColor() -> Color {
@@ -50,26 +56,31 @@ struct ZenRoundedContainer: ViewModifier {
 
   private func shadowColor() -> Color {
     colorScheme == .dark
-      ? Color(.sRGBLinear, white: 0, opacity: 0.4)
+      ? Color(.sRGBLinear, white: 0, opacity: 0.3)
       : Color(.sRGBLinear, white: 0, opacity: 0.1)
   }
 }
 
 public extension View {
-  func roundedContainer(_ cornerRadius: CGFloat = 8, padding: CGFloat = 16, margin: CGFloat = 16) -> some View {
+  func roundedStyle(_ cornerRadius: CGFloat = 8, padding: CGFloat = 8) -> some View {
     self
-      .modifier(ZenRoundedContainer(cornerRadius: cornerRadius, padding: padding, margin: margin))
+      .modifier(RoundedContainer(cornerRadius: cornerRadius, padding: padding))
+  }
+
+  func roundedStyle(_ cornerRadius: CGFloat = 8, padding: EdgeInsets) -> some View {
+    self
+      .modifier(RoundedContainer(cornerRadius: cornerRadius, padding: padding))
   }
 }
 
 #Preview {
     VStack {
        Text("Light Mode")
-            .roundedContainer()
+            .roundedStyle()
             .environment(\.colorScheme, .light)
 
         Text("Dark Mode")
-            .roundedContainer()
+            .roundedStyle()
             .environment(\.colorScheme, .dark)
     }
 }

@@ -2,38 +2,39 @@ import SwiftUI
 
 struct ZenButtonStyle: ButtonStyle {
   @State private var isHovered: Bool
-  @Binding private var hoverEffect: Bool
   @Environment(\.isFocused) private var isFocused
   @Environment(\.colorScheme) private var colorScheme
   @Environment(\.controlActiveState) private var controlActiveState
 
-  private let config: ZenStyleConfiguration
+  private let config: ButtonDefaults
 
-  init(_ config: ZenStyleConfiguration) {
+  init(_ config: ButtonDefaults) {
     self.config = config
-    _isHovered = .init(initialValue: config.hoverEffect.wrappedValue ? false : true)
-    _hoverEffect = config.hoverEffect
+    _isHovered = .init(initialValue: config.hoverEffect ? false : true)
   }
 
   func makeBody(configuration: Configuration) -> some View {
     configuration.label
-      .padding(.vertical, config.padding.vertical?.padding)
-      .padding(.horizontal, config.padding.horizontal.padding * 1.5)
+      .textStyle {
+        $0.font = config.font
+      }
+      .padding(config.padding.edgeInsets)
       .foregroundColor(foregroundColor())
       .background(
         ZenStyleBackgroundView(
           cornerRadius: config.cornerRadius,
           calm: config.calm,
           isHovered: $isHovered,
-          nsColor: config.color.nsColor
+          color: config.backgroundColor
         )
+        .opacity(config.backgroundColor == .clear ? 0 : 1)
       )
       .overlay {
         Group {
           RoundedRectangle(cornerRadius: config.cornerRadius + 1.5, style: .continuous)
-            .strokeBorder(Color(nsColor: config.color.nsColor), lineWidth: 1.5)
+            .strokeBorder(config.foregroundColor, lineWidth: 1.5)
           RoundedRectangle(cornerRadius: config.cornerRadius, style: .continuous)
-            .strokeBorder(Color(nsColor: config.color.nsColor).opacity(0.5), lineWidth: 1.5)
+            .strokeBorder(config.foregroundColor.opacity(0.5), lineWidth: 1.5)
             .padding(1.5)
         }
         .opacity(focusOverlayOpacity())
@@ -41,7 +42,7 @@ struct ZenButtonStyle: ButtonStyle {
       }
       .background(
         RoundedRectangle(cornerRadius: config.cornerRadius)
-          .fill(Color(nsColor: config.color.nsColor))
+          .fill(config.foregroundColor)
           .blur(radius: 2)
           .scaleEffect(0.9)
           .opacity(focusBackgroundOpacity())
@@ -65,36 +66,32 @@ struct ZenButtonStyle: ButtonStyle {
       .animation(.easeOut(duration: 0.1), value: configuration.isPressed)
       .animation(.easeOut(duration: 0.1), value: isHovered)
       .onHover(perform: { value in
-        guard config.hoverEffect.wrappedValue else { return }
+        guard config.hoverEffect else { return }
         guard self.isHovered != value else { return }
         self.isHovered = value
-      })
-      .onChange(of: hoverEffect, perform: { newValue in
-        self.isHovered = !newValue
       })
   }
 
   // MARK: - Private methods
 
   private func foregroundColor() -> Color {
-    isHovered 
-    ? Color(.white)
-    : Color(colorScheme == .dark ? .textColor : .textColor)
+    config.foregroundColor
+      .opacity(config.hoverEffect ? isHovered ? 1 : 0.5 : 1)
   }
 
   private func focusOverlayOpacity() -> CGFloat {
-    (isFocused && config.focusEffect.wrappedValue && controlActiveState == .key)
+    (isFocused && config.focusEffect && controlActiveState == .key)
     ? 1 : 0.0
   }
 
   private func focusBackgroundOpacity() -> CGFloat {
-    (config.hoverEffect.wrappedValue == false
-     && isFocused && config.focusEffect.wrappedValue)
+    (config.hoverEffect == false
+     && isFocused && config.focusEffect)
     ? 1 : 0.0
   }
 
   private func grayscale() -> CGFloat {
-    config.grayscaleEffect.wrappedValue ? isHovered ? 0
+    config.grayscaleEffect ? isHovered ? 0
     : isHovered ? 0.5 : 1
     : controlActiveState == .key ? 0 : 0.4
   }
@@ -107,16 +104,16 @@ struct ZenButtonStyle: ButtonStyle {
 }
 
 struct ZenButtonStyle_Previews: PreviewProvider {
-  static var colors: [ZenColor] = [
-    .systemRed,
-    .systemOrange,
-    .systemYellow,
-    .systemGreen,
-    .systemBlue,
-    .systemPurple,
-    .systemGray,
-    .systemCyan,
-    .systemMint,
+  static var colors: [Color] = [
+    Color(.systemRed),
+    Color(.systemOrange),
+    Color(.systemYellow),
+    Color(.systemGreen),
+    Color(.systemBlue),
+    Color(.systemPurple),
+    Color(.systemGray),
+    Color(.systemCyan),
+    Color(.systemMint),
   ]
 
   static var previews: some View {
@@ -125,24 +122,19 @@ struct ZenButtonStyle_Previews: PreviewProvider {
         Button(action: {}, label: {
           Image(systemName: "person")
         })
-        .buttonStyle(.calm(color: .systemGreen, padding: .medium))
-
         Button("Primary", action: {})
-          .buttonStyle(.primary)
         Button("Positive", action: {})
-          .buttonStyle(.positive)
         Button("Destructive", action: {})
-          .buttonStyle(.destructive)
       }
 
       VStack {
-        ForEach(colors, id: \.self) {
+        ForEach(colors, id: \.self) { color in
           Button(action: {}, label: { Text("Light button") })
             .environment(\.colorScheme, .light)
-            .buttonStyle(.zen(ZenStyleConfiguration(color: $0)))
+            .buttonStyle { $0.backgroundColor = color }
           Button(action: {}, label: { Text("Dark button") })
             .environment(\.colorScheme, .dark)
-            .buttonStyle(.zen(ZenStyleConfiguration(color: $0)))
+            .buttonStyle { $0.backgroundColor = color }
         }
       }
     }

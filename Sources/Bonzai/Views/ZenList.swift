@@ -12,6 +12,7 @@ public struct ZenList<Content: View>: View {
       content()
         .listRowSeparator(.hidden)
         .listRowInsets(EdgeInsets())
+        .listRowBackground(Color.clear)
     }
     .scrollContentBackground(.hidden)
     .listStyle(.plain)

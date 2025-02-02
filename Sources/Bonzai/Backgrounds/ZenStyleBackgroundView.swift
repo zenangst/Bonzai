@@ -1,3 +1,4 @@
+import AppKit
 import SwiftUI
 
 struct ZenStyleBackgroundView: View {
@@ -5,14 +6,12 @@ struct ZenStyleBackgroundView: View {
   let cornerRadius: CGFloat
   let calm: Bool
   @Binding var isHovered: Bool
-  let nsColor: NSColor
+  let color: Color
 
   var body: some View {
     RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
       .fill(LinearGradient(
-        stops: Gradient.Stop.zen(colorScheme,
-                                 isHovered: isHovered,
-                                 nsColor: nsColor),
+        stops: Gradient.Stop.zen(colorScheme, isHovered: isHovered, color: color),
         startPoint: .top, endPoint: .bottom))
       .opacity(fillOpacity())
       .background(

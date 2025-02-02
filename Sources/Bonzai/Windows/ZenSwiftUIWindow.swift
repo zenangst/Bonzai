@@ -11,13 +11,16 @@ public struct ZenSwiftUIWindowOverrides {
 }
 
 open class ZenSwiftUIWindow<Content>: NSWindow where Content: View {
-  public let hostingController: NSHostingController<Content>
+  private let sizeFitting: (_ size: CGSize) -> CGSize
   public var overrides: ZenSwiftUIWindowOverrides
 
   public init(contentRect: NSRect = .zero, styleMask style: NSWindow.StyleMask,
               overrides: ZenSwiftUIWindowOverrides = .init(canBecomeKey: true, canBecomeMain: false),
-              @ViewBuilder content: () -> Content) {
-    self.hostingController = NSHostingController(rootView: content())
+              @ViewBuilder content rootView: () -> Content) {
+    let rootView = rootView()
+      .defaultStyle()
+    let hostingController = NSHostingController(rootView: rootView)
+    self.sizeFitting = { hostingController.sizeThatFits(in: $0) }
     self.overrides = overrides
     super.init(contentRect: contentRect, styleMask: style, backing: .buffered, defer: true)
 
@@ -33,9 +36,13 @@ open class ZenSwiftUIWindow<Content>: NSWindow where Content: View {
   }
 
   public func sizeThatFits(in size: CGSize) -> CGSize {
-    hostingController.sizeThatFits(in: size)
+    sizeFitting(size)
   }
 
   open override var canBecomeKey: Bool { overrides.canBecomeKey }
   open override var canBecomeMain: Bool { overrides.canBecomeMain }
+}
+
+protocol SizeFitting: NSWindow {
+  func sizeThatFits(in size: CGSize) -> CGSize
 }

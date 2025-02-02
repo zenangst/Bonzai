@@ -141,10 +141,8 @@ public struct WhatsNewView: View {
 
       HStack {
         Button("Release notes", action: {})
-          .buttonStyle(.zen(.init(calm: true, color: .accentColor, hoverEffect: .constant(true))))
         Spacer()
         Button("Continue", action: {})
-          .buttonStyle(.zen(.init(color: .systemGreen, hoverEffect: .constant(false))))
       }
       .padding(.horizontal, 24)
       .padding(.bottom, 18)

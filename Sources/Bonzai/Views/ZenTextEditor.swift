@@ -1,18 +1,18 @@
 import SwiftUI
 
 public struct ZenTextEditor: View {
-  @EnvironmentObject var publisher: ZenColorPublisher
+  @EnvironmentObject var publisher: ColorPublisher
   @FocusState var isFocused: Bool
   @State var isHovered: Bool = false
   @Binding var text: String
 
-  private let color: ZenColor
+  private let color: Color
   private let font: Font
   private let placeholder: String
   private let onFocusChange: ((Bool) -> Void)?
   private let onCommandReturnKey: (() -> Void)?
 
-  public init(color: ZenColor = .accentColor,
+  public init(color: Color = .accentColor,
               text: Binding<String>,
               placeholder: String,
               font: Font = .body,
@@ -37,10 +37,8 @@ public struct ZenTextEditor: View {
                   content: {
         RoundedRectangle(cornerRadius: 4)
           .fill(
-            Color(isFocused
-                  ? color.nsColor.withAlphaComponent(0.5)
-                  : .windowFrameTextColor.withAlphaComponent(0.15)
-                 )
+            (isFocused ? color : Color(.windowFrameTextColor))
+            .opacity(isFocused ? 0.5 : 0.15)
           )
           .frame(width: 5)
       })
@@ -60,12 +58,15 @@ public struct ZenTextEditor: View {
       .padding(4)
       .background(
         RoundedRectangle(cornerRadius: 4)
-          .fill(Color(isFocused ? color.nsColor.withAlphaComponent(0.5) : .windowFrameTextColor))
+          .fill((isFocused ? color : Color(.windowFrameTextColor)))
           .opacity(isFocused ? 0.15 : isHovered ? 0.015 : 0)
       )
       .background(
         RoundedRectangle(cornerRadius: 4)
-          .stroke(Color(isFocused ? color.nsColor.withAlphaComponent(0.5) : .windowFrameTextColor), lineWidth: 1)
+          .stroke(
+            (isFocused ? color : Color(.windowFrameTextColor))
+              .opacity(isFocused ? 0.5 : 0.15)
+            , lineWidth: 1)
           .opacity(isFocused ? 0.75 : isHovered ? 0.15 : 0)
 
       )
