@@ -198,6 +198,29 @@ public struct HierarchyStyleViewModifier: ViewModifier {
       case .tertiary:
         content
           .modifier(Debugger(color: level.color))
+          .textFieldStyle({ textField in
+            textField.style = .roundedBorder
+            textField.decorationColor = .clear
+            textField.backgroundColor = .clear
+            textField.padding = .small
+          })
+          .textStyle { text in
+            text.font = .caption2
+          }
+          .checkboxStyle { checkbox in
+            checkbox.style = .small
+          }
+          .menuStyle { menu in
+            menu.calm = false
+            menu.font = .caption2
+            menu.cornerRadius = 4
+            menu.padding = .medium
+          }
+          .buttonStyle { button in
+            button.calm = false
+            button.font = .caption2
+            button.padding = .small
+          }
           .padding(.horizontal, level.padding(in: section).horizontal)
           .padding(.vertical, level.padding(in: section).vertical)
       case .list:
@@ -208,15 +231,20 @@ public struct HierarchyStyleViewModifier: ViewModifier {
       case .item:
         content
           .modifier(Debugger(color: level.color))
-          .textStyle { style in
-            style.font = .body
+          .textStyle { text in
+            text.font = .body
           }
           .textFieldStyle({ textField in
             textField.style = .roundedBorder
             textField.backgroundColor = .clear
           })
-          .buttonStyle { style in
-            style.font = .caption
+          .buttonStyle { button in
+            button.font = .caption2
+            button.cornerRadius = 4
+          }
+          .menuStyle { menu in
+            menu.font = .caption2
+            menu.cornerRadius = 4
           }
           .padding(.horizontal, level.padding(in: section).horizontal)
           .padding(.vertical, level.padding(in: section).vertical)
@@ -235,16 +263,17 @@ public struct HierarchyStyleViewModifier: ViewModifier {
           .checkboxStyle { checkbox in
             checkbox.style = .small
           }
-          .buttonStyle { button in
-            button.calm = true
-            button.font = .caption2
-            button.padding = .small
-          }
           .menuStyle { menu in
-            menu.calm = true
+            menu.calm = false
             menu.font = .caption2
             menu.cornerRadius = 4
             menu.padding = .medium
+          }
+          .buttonStyle { button in
+            button.calm = true
+            button.font = .caption2
+            button.cornerRadius = 4
+            button.padding = .small
           }
           .padding(.horizontal, level.padding(in: section).horizontal)
           .padding(.vertical, level.padding(in: section).vertical)

@@ -5,6 +5,7 @@ struct ZenStyleBackgroundView: View {
   @Environment(\.colorScheme) var colorScheme
   let cornerRadius: CGFloat
   let calm: Bool
+  let unfocusedOpacity: CGFloat
   @Binding var isHovered: Bool
   let color: Color
 
@@ -15,10 +16,16 @@ struct ZenStyleBackgroundView: View {
         startPoint: .top, endPoint: .bottom))
       .opacity(fillOpacity())
       .background(
-        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-          .stroke(strokeColor(), lineWidth: 1)
-          .offset(y: 0.25)
-          .opacity(strokeOpacity())
+        LinearGradient(stops: [
+          .init(color: strokeColor().blended(withFraction: 0.75, of: .systemGray), location: 0),
+          .init(color: strokeColor().blended(withFraction: 0.4, of: .systemGray), location: 0.5)
+        ], startPoint: .top, endPoint: .bottom)
+          .mask {
+            RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+              .stroke(strokeColor(), lineWidth: 1)
+              .padding(1)
+              .opacity(strokeOpacity())
+          }
       )
   }
 
@@ -33,23 +40,22 @@ struct ZenStyleBackgroundView: View {
 
   private func strokeOpacity() -> CGFloat {
     if calm && isHovered == false {
-      return 0.4
+      return unfocusedOpacity
     }
 
     return isHovered ? 1.0
-    : colorScheme == .light ? 0.7 : 0.3
+    : colorScheme == .light ? 0.7 : unfocusedOpacity
   }
 
   private func strokeColor() -> Color {
     if calm && isHovered == false {
-      return Color(colorScheme == .dark ? .textColor : .textColor)
-        .opacity(0.1)
+      return Color(colorScheme == .dark ? .black : .textColor)
     }
 
     if colorScheme == .dark {
-      return Color(nsColor: .shadowColor).opacity(0.2)
+      return Color.black.opacity(unfocusedOpacity)
     } else {
-      return Color(nsColor: .shadowColor).opacity(0.2)
+      return Color(nsColor: .shadowColor).opacity(unfocusedOpacity)
     }
   }
 }

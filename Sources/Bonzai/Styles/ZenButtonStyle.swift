@@ -24,6 +24,7 @@ struct ZenButtonStyle: ButtonStyle {
         ZenStyleBackgroundView(
           cornerRadius: config.cornerRadius,
           calm: config.calm,
+          unfocusedOpacity: config.unfocusedOpacity,
           isHovered: $isHovered,
           color: config.backgroundColor
         )

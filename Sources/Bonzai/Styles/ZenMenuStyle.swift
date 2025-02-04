@@ -31,9 +31,11 @@ struct ZenMenuStyleInternalView: View {
 
   var body: some View {
     Menu(menuConfiguration)
-      .font(config.font)
       .menuStyle(.borderlessButton)
-      .buttonStyle({ button in
+      .textStyle({ text in
+        text.font = config.font
+      })
+      .buttonStyle { button in
         let menuButtonStyle = config.buttonConfig()
         button.calm = menuButtonStyle.calm
         button.backgroundColor = menuButtonStyle.backgroundColor
@@ -45,7 +47,7 @@ struct ZenMenuStyleInternalView: View {
         button.hoverEffect = menuButtonStyle.hoverEffect
         button.padding = menuButtonStyle.padding
         button.unfocusedOpacity = menuButtonStyle.unfocusedOpacity
-      })
+      }
       .truncationMode(.middle)
       .foregroundStyle(foregroundStyle())
       .allowsTightening(true)
@@ -59,10 +61,10 @@ struct ZenMenuStyleInternalView: View {
         ZenStyleBackgroundView(
           cornerRadius: config.cornerRadius,
           calm: config.calm,
+          unfocusedOpacity: config.unfocusedOpacity,
           isHovered: $isHovered,
           color: config.backgroundColor
         )
-        .opacity(isHovered ? 1 : config.unfocusedOpacity)
       )
       .grayscale(grayscale())
       .compositingGroup()

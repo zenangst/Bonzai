@@ -14,18 +14,18 @@ public struct MenuDefaults {
   public var padding: MenuDefaults.Padding
   public var unfocusedOpacity: Double
 
-  init(backgroundColor: Color = Color.gray,
-       calm: Bool = false,
-       color: Color = Color.gray,
-       cornerRadius: CGFloat = 4,
-       focusEffect: Bool = false,
-       font: Font = .body,
-       foregroundColor: Color = Color.primary,
-       glow: Bool = false,
-       grayscaleEffect: Bool = false,
-       hoverEffect: Bool = true,
-       padding: MenuDefaults.Padding = .medium,
-       unfocusedOpacity: Double = 0.1) {
+  init(backgroundColor: Color,
+       calm: Bool,
+       color: Color,
+       cornerRadius: CGFloat,
+       focusEffect: Bool,
+       font: Font,
+       foregroundColor: Color,
+       glow: Bool,
+       grayscaleEffect: Bool,
+       hoverEffect: Bool,
+       padding: MenuDefaults.Padding,
+       unfocusedOpacity: Double) {
     self.backgroundColor = backgroundColor
     self.calm = calm
     self.color = color

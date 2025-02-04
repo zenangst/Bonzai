@@ -20,21 +20,26 @@ struct RoundedContainer: ViewModifier {
       .padding(padding)
       .background(
           LinearGradient(stops: [
-            .init(color: background(fraction: 0.015, of: .white), location: 0),
-            .init(color: background(fraction: 0.015, of: .black), location: 1)
+            .init(color: background(fraction: 0, of: .black), location: 0),
+            .init(color: background(fraction: 0.2, of: .black), location: 1.0),
           ], startPoint: .top, endPoint: .bottom)
       )
       .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
       .overlay(
-        RoundedRectangle(cornerRadius: cornerRadius - 1)
-          .stroke(Color(nsColor: .controlColor).opacity(0.2), lineWidth: 2)
-          .padding(1)
+        LinearGradient(stops: [
+          .init(color: borderColor().blended(withFraction: 0.4, of: .systemGray), location: 0),
+          .init(color: borderColor().blended(withFraction: 0.2, of: .systemGray), location: 0.5)
+        ], startPoint: .top, endPoint: .bottom)
+        .mask {
+          RoundedRectangle(cornerRadius: cornerRadius - 1)
+            .stroke(.black, lineWidth: 1)
+            .padding(1)
+        }
           .allowsHitTesting(false)
       )
       .overlay(
-        RoundedRectangle(cornerRadius: cornerRadius - 1)
-          .stroke(borderColor(), lineWidth: 1)
-          .padding(1.5)
+        RoundedRectangle(cornerRadius: cornerRadius)
+          .stroke(Color(nsColor: .controlColor).opacity(0.2), lineWidth: 2)
           .allowsHitTesting(false)
       )
       .compositingGroup()
@@ -44,14 +49,14 @@ struct RoundedContainer: ViewModifier {
 
   private func borderColor() -> Color {
     colorScheme == .dark
-    ? Color(nsColor: .controlColor).opacity(0.4)
+    ? Color.black
     : Color(nsColor: .systemGray).opacity(0.2)
   }
 
-  private func background(fraction: CGFloat = 0.0, of color: NSColor = .clear) -> Color {
+  private func background(fraction: CGFloat = 0.0, of color: Color = .clear) -> Color {
     colorScheme == .dark
-    ? Color(nsColor: .underPageBackgroundColor.blended(withFraction: fraction, of: color)!)
-    : Color(nsColor: .alternateSelectedControlTextColor.blended(withFraction: fraction, of: color)!)
+    ? Color(.underPageBackgroundColor).blended(withFraction: fraction, of: color)
+    : Color(nsColor: .alternateSelectedControlTextColor).blended(withFraction: fraction, of: color)
   }
 
   private func shadowColor() -> Color {
@@ -71,6 +76,7 @@ public extension View {
     self
       .modifier(RoundedContainer(cornerRadius: cornerRadius, padding: padding))
   }
+
 }
 
 #Preview {
