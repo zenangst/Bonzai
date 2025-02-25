@@ -9,7 +9,7 @@ struct toggleCalmOverride: EnvironmentKey {
 }
 
 struct toggleCornerRadiusOverride: EnvironmentKey {
-  static let defaultValue: CGFloat = 6
+  static let defaultValue: CGFloat = Styles.config.toggle.cornerRadius
 }
 
 struct toggleFocusEffectOverride: EnvironmentKey {

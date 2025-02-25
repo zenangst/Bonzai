@@ -9,7 +9,7 @@ struct switchCalmOverride: EnvironmentKey {
 }
 
 struct switchCornerRadiusOverride: EnvironmentKey {
-  static let defaultValue: CGFloat = 6
+  static let defaultValue: CGFloat = Styles.config.switch.cornerRadius
 }
 
 struct switchFocusEffectOverride: EnvironmentKey {

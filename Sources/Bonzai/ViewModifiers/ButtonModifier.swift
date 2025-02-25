@@ -85,6 +85,7 @@ public enum PredefinedButtonStyle {
   case cancel
   case positive
   case destructive
+  case help
 }
 
 public extension View {
@@ -109,6 +110,12 @@ public extension View {
           grayscaleEffect: true
         )
       )
+    case .help:
+      self.modifier(ButtonModifier(
+        backgroundColor: .systemYellow,
+        calm: true,
+        hoverEffect: true
+      ))
     case .destructive:
       self.modifier(
         ButtonModifier(

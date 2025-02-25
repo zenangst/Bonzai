@@ -9,7 +9,7 @@ struct menuCalmOverride: EnvironmentKey {
 }
 
 struct menuCornerRadiusOverride: EnvironmentKey {
-  static let defaultValue: CGFloat = 6
+  static let defaultValue: CGFloat = Styles.config.menu.cornerRadius
 }
 
 struct menuFocusEffectOverride: EnvironmentKey {

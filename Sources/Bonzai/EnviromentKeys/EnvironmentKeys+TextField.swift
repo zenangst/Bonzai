@@ -13,7 +13,7 @@ struct textFieldColorOverride: EnvironmentKey {
 }
 
 struct textFieldCornerRadiusOverride: EnvironmentKey {
-  static let defaultValue: CGFloat = 6
+  static let defaultValue: CGFloat = Styles.config.textField.cornerRadius
 }
 
 struct textFieldDecorationColorOverride: EnvironmentKey {

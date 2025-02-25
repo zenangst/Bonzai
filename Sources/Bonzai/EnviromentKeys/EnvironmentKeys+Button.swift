@@ -9,7 +9,7 @@ struct buttonCalmOverride: EnvironmentKey {
 }
 
 struct buttonCornerRadiusOverride: EnvironmentKey {
-  static let defaultValue: CGFloat = 6
+  static let defaultValue: CGFloat = Styles.config.button.cornerRadius
 }
 
 struct buttonFocusEffectOverride: EnvironmentKey {

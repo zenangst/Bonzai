@@ -219,7 +219,7 @@ public struct HierarchyStyleViewModifier: ViewModifier {
           .buttonStyle { button in
             button.calm = false
             button.font = .caption2
-            button.padding = .small
+            button.padding = .medium
           }
           .padding(.horizontal, level.padding(in: section).horizontal)
           .padding(.vertical, level.padding(in: section).vertical)
@@ -267,7 +267,7 @@ public struct HierarchyStyleViewModifier: ViewModifier {
             menu.calm = false
             menu.font = .caption2
             menu.cornerRadius = 4
-            menu.padding = .medium
+            menu.padding = .small
           }
           .buttonStyle { button in
             button.calm = true
