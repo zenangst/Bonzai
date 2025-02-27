@@ -13,7 +13,8 @@ struct ZenStyleBackgroundView: View {
     RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
       .fill(LinearGradient(
         stops: Gradient.Stop.zen(colorScheme, isHovered: isHovered, color: color),
-        startPoint: .top, endPoint: .bottom))
+        startPoint: .top, endPoint: .bottom)
+      )
       .opacity(fillOpacity())
       .background(
         LinearGradient(stops: [
@@ -27,6 +28,7 @@ struct ZenStyleBackgroundView: View {
               .opacity(strokeOpacity())
           }
       )
+      .drawingGroup()
   }
 
   private func fillOpacity() -> CGFloat {
