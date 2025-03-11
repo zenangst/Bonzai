@@ -59,7 +59,16 @@ struct SwitchModifier: ViewModifier {
       .toggleStyle(ZenSwitchStyle(style: overrideSwitchStyle ?? style))
       .environment(\.switchForegroundColor, overrideSwitchForegroundColor ?? foregroundColor)
       .environment(\.switchBackgroundColor, overrideSwitchBackgroundColor ?? backgroundColor)
-      .environment(\.switchStyle, style)
+      .environment(\.switchCalm, overrideSwitchCalm ?? calm)
+      .environment(\.switchCornerRadius, overrideSwitchCornerRadius ?? cornerRadius)
+      .environment(\.switchFocusEffect, overrideSwitchFocusEffect ?? focusEffect)
+      .environment(\.switchFont, overrideSwitchFont ?? font)
+      .environment(\.switchGlow, overrideSwitchGlow ?? glow)
+      .environment(\.switchGrayscaleEffect, overrideSwitchGrayscaleEffect ?? grayscaleEffect)
+      .environment(\.switchHoverEffect, overrideSwitchHoverEffect ?? hoverEffect)
+      .environment(\.switchPadding, overrideSwitchPadding ?? padding)
+      .environment(\.switchStyle, overrideSwitchStyle ?? style)
+      .environment(\.switchUnfocusedOpacity, overrideSwitchUnfocusedOpacity ?? unfocusedOpacity)
   }
 }
 

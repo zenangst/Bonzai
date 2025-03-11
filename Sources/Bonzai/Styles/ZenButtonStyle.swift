@@ -1,49 +1,56 @@
 import SwiftUI
 
 struct ZenButtonStyle: ButtonStyle {
+  @Environment(\.buttonBackgroundColor) var backgroundColor
+  @Environment(\.buttonCalm) var calm
+  @Environment(\.buttonCornerRadius) var cornerRadius
+  @Environment(\.buttonFocusEffect) var focusEffect
+  @Environment(\.buttonFont) var font
+  @Environment(\.buttonForegroundColor) var envForegroundColor
+  @Environment(\.buttonGlow) var glow
+  @Environment(\.buttonGrayscaleEffect) var grayscaleEffect
+  @Environment(\.buttonHoverEffect) var hoverEffect
+  @Environment(\.buttonPadding) var padding
+  @Environment(\.buttonUnfocusedOpacity) var unfocusedOpacity
+
   @State private var isHovered: Bool
   @Environment(\.isFocused) private var isFocused
   @Environment(\.colorScheme) private var colorScheme
   @Environment(\.controlActiveState) private var controlActiveState
 
-  private let config: ButtonDefaults
-
-  init(_ config: ButtonDefaults) {
-    self.config = config
-    _isHovered = .init(initialValue: config.hoverEffect ? false : true)
+  init() {
+    _isHovered = .init(initialValue: false)
   }
 
   func makeBody(configuration: Configuration) -> some View {
     configuration.label
-      .textStyle {
-        $0.font = config.font
-      }
-      .padding(config.padding.edgeInsets)
+      .font(font)
+      .padding(padding.edgeInsets)
       .foregroundColor(foregroundColor())
       .background(
         ZenStyleBackgroundView(
-          cornerRadius: config.cornerRadius,
-          calm: config.calm,
-          unfocusedOpacity: config.unfocusedOpacity,
+          cornerRadius: cornerRadius,
+          calm: calm,
+          unfocusedOpacity: unfocusedOpacity,
           isHovered: $isHovered,
-          color: config.backgroundColor
+          color: backgroundColor
         )
-        .opacity(config.backgroundColor == .clear ? 0 : 1)
+        .opacity(backgroundColor == .clear ? 0 : 1)
       )
       .overlay {
         Group {
-          RoundedRectangle(cornerRadius: config.cornerRadius + 1.5, style: .continuous)
-            .strokeBorder(config.foregroundColor, lineWidth: 1.5)
-          RoundedRectangle(cornerRadius: config.cornerRadius, style: .continuous)
-            .strokeBorder(config.foregroundColor.opacity(0.5), lineWidth: 1.5)
+          RoundedRectangle(cornerRadius: cornerRadius + 1.5, style: .continuous)
+            .strokeBorder(envForegroundColor, lineWidth: 1.5)
+          RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+            .strokeBorder(envForegroundColor.opacity(0.5), lineWidth: 1.5)
             .padding(1.5)
         }
         .opacity(focusOverlayOpacity())
         .animation(.bouncy, value: isFocused)
       }
       .background(
-        RoundedRectangle(cornerRadius: config.cornerRadius)
-          .fill(config.foregroundColor)
+        RoundedRectangle(cornerRadius: cornerRadius)
+          .fill(envForegroundColor)
           .blur(radius: 2)
           .scaleEffect(0.9)
           .opacity(focusBackgroundOpacity())
@@ -67,7 +74,7 @@ struct ZenButtonStyle: ButtonStyle {
       .animation(.easeOut(duration: 0.1), value: configuration.isPressed)
       .animation(.easeOut(duration: 0.1), value: isHovered)
       .onHover(perform: { value in
-        guard config.hoverEffect else { return }
+        guard hoverEffect else { return }
         guard self.isHovered != value else { return }
         self.isHovered = value
       })
@@ -76,23 +83,23 @@ struct ZenButtonStyle: ButtonStyle {
   // MARK: - Private methods
 
   private func foregroundColor() -> Color {
-    config.foregroundColor
-      .opacity(config.hoverEffect ? isHovered ? 1 : 0.5 : 1)
+    envForegroundColor
+      .opacity(hoverEffect ? isHovered ? 1 : 0.5 : 1)
   }
 
   private func focusOverlayOpacity() -> CGFloat {
-    (isFocused && config.focusEffect && controlActiveState == .key)
+    (isFocused && focusEffect && controlActiveState == .key)
     ? 1 : 0.0
   }
 
   private func focusBackgroundOpacity() -> CGFloat {
-    (config.hoverEffect == false
-     && isFocused && config.focusEffect)
+    (hoverEffect == false
+     && isFocused && focusEffect)
     ? 1 : 0.0
   }
 
   private func grayscale() -> CGFloat {
-    config.grayscaleEffect ? isHovered ? 0
+    grayscaleEffect ? isHovered ? 0
     : isHovered ? 0.5 : 1
     : controlActiveState == .key ? 0 : 0.4
   }
@@ -100,7 +107,7 @@ struct ZenButtonStyle: ButtonStyle {
   private func opacity() -> CGFloat {
     isHovered
     ? 1.0
-      : colorScheme == .light ? (config.calm ? 0.8 : 1) : (config.calm ? 0.4 : 0.8)
+      : colorScheme == .light ? (calm ? 0.8 : 1) : (calm ? 0.4 : 0.8)
   }
 }
 

@@ -9,12 +9,18 @@ public struct IconView: View {
   public init(icon: Icon?, size: CGSize) {
     self.icon = icon
     self.size = size
+
+    if let icon {
+      let image = NSWorkspace.shared.icon(forFile: icon.path)
+      _nsImage = .init(initialValue: image)
+    }
   }
 
   public var body: some View {
     Group {
       if let nsImage {
         Image(nsImage: nsImage)
+          .resizable()
           .aspectRatio(contentMode: .fill)
       } else {
         Color.clear

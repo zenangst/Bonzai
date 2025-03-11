@@ -122,6 +122,16 @@ public struct MenuDefaults {
 
       }
     }
+
+    func asButtonPadding() -> ButtonDefaults.Padding {
+      switch self {
+      case .extraLarge: .extraLarge
+      case .large: .large
+      case .medium: .medium
+      case .small: .small
+      case .mini: .mini
+      }
+    }
   }
 }
 

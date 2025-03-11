@@ -4,40 +4,47 @@ struct ZenTextFieldStyle: TextFieldStyle {
   @Environment(\.controlActiveState) var controlActiveState
   @FocusState var isFocused: Bool
   @State var isHovered: Bool = false
-  private let config: TextFieldDefaults
 
-  init(_ defaults: TextFieldDefaults) {
-    self.config = defaults
-  }
+  @Environment(\.textFieldBackgroundColor) var backgroundColor
+  @Environment(\.textFieldCalm) var calm
+  @Environment(\.textFieldCornerRadius) var cornerRadius
+  @Environment(\.textFieldDecorationColor) var decorationColor
+  @Environment(\.textFieldFocusEffect) var focusEffect
+  @Environment(\.textFieldFont) var font
+  @Environment(\.textFieldForegroundColor) var foregroundColor
+  @Environment(\.textFieldGlow) var glow
+  @Environment(\.textFieldGrayscaleEffect) var grayscaleEffect
+  @Environment(\.textFieldHoverEffect) var hoverEffect
+  @Environment(\.textFieldPadding) var padding
+  @Environment(\.textFieldStyle) var style
+  @Environment(\.textFieldUnfocusedOpacity) var unfocusedOpacity
 
   func _body(configuration: TextField<_Label>) -> some View {
     HStack {
       applyTextfieldStyle(configuration)
-        .background(config.backgroundColor)
-        .font(config.font)
+        .background(backgroundColor)
+        .font(font)
         .background(
           RoundedRectangle(cornerRadius: 7)
-            .stroke(Color(isFocused ? config.decorationColor.nsForegroundColor : .windowFrameTextColor), lineWidth: 2)
+            .stroke(Color(isFocused ? decorationColor.nsForegroundColor : .windowFrameTextColor), lineWidth: 2)
             .padding(-2)
-            .opacity(isFocused ? 0.5 : config.unfocusedOpacity)
+            .opacity(isFocused ? 0.5 : unfocusedOpacity)
         )
         .background(
           RoundedRectangle(cornerRadius: 6)
-            .strokeBorder(config.decorationColor.opacity(0.5), lineWidth: 2)
+            .strokeBorder(decorationColor.opacity(0.5), lineWidth: 2)
             .padding(-1)
-            .opacity(isFocused ? 0.5 : config.unfocusedOpacity)
+            .opacity(isFocused ? 0.5 : unfocusedOpacity)
         )
         .overlay(
           RoundedRectangle(cornerRadius: 4)
-            .stroke(Color(isFocused ? config.decorationColor.nsForegroundColor : .windowFrameTextColor), lineWidth: 2)
+            .stroke(Color(isFocused ? decorationColor.nsForegroundColor : .windowFrameTextColor), lineWidth: 2)
             .animation(.easeInOut(duration: 0.25), value: isFocused)
             .compositingGroup()
-            .shadow(color: isFocused ? config.decorationColor : .clear, radius: 2)
+            .shadow(color: isFocused ? decorationColor : .clear, radius: 2)
             .padding(-2)
             .opacity(
-              config.glow ? (isFocused ? 0.75
-                             : isHovered
-                             ? 0.25 : 0) : 0)
+              glow ? (isFocused ? 0.75 : isHovered ? 0.25 : 0) : 0)
         )
         .compositingGroup()
         .grayscale(grayscale())
@@ -53,14 +60,14 @@ struct ZenTextFieldStyle: TextFieldStyle {
 
   @ViewBuilder
   private func applyTextfieldStyle(_ configuration: TextField<_Label>) -> some View {
-    switch config.style {
+    switch style {
     case .automatic:
       configuration
         .textFieldStyle(.automatic)
     case .plain:
       configuration
         .textFieldStyle(.plain)
-        .padding(config.padding.edgeInsets)
+        .padding(padding.edgeInsets)
     case .roundedBorder:
       configuration
         .textFieldStyle(.roundedBorder)

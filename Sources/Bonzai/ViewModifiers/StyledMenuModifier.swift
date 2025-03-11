@@ -50,23 +50,30 @@ struct StyledMenuModifier: ViewModifier {
   }
 
   func body(content: Content) -> some View {
-    let config = MenuDefaults(
-      backgroundColor: overrideMenuBackgroundColor ?? backgroundColor,
-      calm: overrideMenuCalm ?? calm,
-      color: overrideMenuForegroundColor ?? foregroundColor,
-      cornerRadius: overrideMenuCornerRadius ?? cornerRadius,
-      focusEffect: overrideMenuFocusEffect ?? focusEffect,
-      font: overrideMenuFont ?? font,
-      foregroundColor: overrideMenuForegroundColor ?? foregroundColor,
-      glow: overrideMenuGlow ?? glow,
-      grayscaleEffect: overrideMenuGrayscaleEffect ?? grayscaleEffect,
-      hoverEffect: overrideMenuHoverEffect ?? hoverEffect,
-      padding: overrideMenuPadding ?? padding,
-      unfocusedOpacity: overrideMenuUnfocusedOpacity ?? unfocusedOpacity
-    )
-
     content
-      .menuStyle(ZenMenuStyle(config))
+      .menuStyle(ZenMenuStyle())
+      .environment(\.menuBackgroundColor, overrideMenuBackgroundColor ?? backgroundColor)
+      .environment(\.menuCalm, overrideMenuCalm ?? calm)
+      .environment(\.menuCornerRadius, overrideMenuCornerRadius ?? cornerRadius)
+      .environment(\.menuFont, overrideMenuFont ?? font)
+      .environment(\.menuForegroundColor, overrideMenuForegroundColor ?? foregroundColor)
+      .environment(\.menuFocusEffect, overrideMenuFocusEffect ?? focusEffect)
+      .environment(\.menuGlow, overrideMenuGlow ?? glow)
+      .environment(\.menuGrayscaleEffect, overrideMenuGrayscaleEffect ?? grayscaleEffect)
+      .environment(\.menuHoverEffect, overrideMenuHoverEffect ?? hoverEffect)
+      .environment(\.menuPadding, overrideMenuPadding ?? padding)
+      .environment(\.menuUnfocusedOpacity, overrideMenuUnfocusedOpacity ?? unfocusedOpacity)
+
+      .environment(\.buttonBackgroundColor, overrideMenuBackgroundColor ?? backgroundColor)
+      .environment(\.buttonForegroundColor, overrideMenuForegroundColor ?? foregroundColor)
+      .environment(\.buttonCalm, overrideMenuCalm ?? calm)
+      .environment(\.buttonCornerRadius, overrideMenuCornerRadius ?? cornerRadius)
+      .environment(\.buttonFocusEffect, overrideMenuFocusEffect ?? focusEffect)
+      .environment(\.buttonFont, overrideMenuFont ?? font)
+      .environment(\.buttonGlow, overrideMenuGlow ?? glow)
+      .environment(\.buttonGrayscaleEffect, overrideMenuGrayscaleEffect ?? grayscaleEffect)
+      .environment(\.buttonHoverEffect, overrideMenuHoverEffect ?? hoverEffect)
+      .environment(\.buttonUnfocusedOpacity, overrideMenuUnfocusedOpacity ?? unfocusedOpacity)
   }
 }
 

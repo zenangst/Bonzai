@@ -3,15 +3,10 @@ import SwiftUI
 struct ZenCheckboxStyle: ToggleStyle {
   @Environment(\.colorScheme) var colorScheme
   @Environment(\.toggleForegroundColor) var foregroundColor
+  @Environment(\.toggleFont) var font
   @Environment(\.toggleBackgroundColor) var backgroundColor
   @Environment(\.toggleStyle) var style
   @State var isHovered: Bool = false
-
-  private let config: ToggleDefaults
-
-  init(config: ToggleDefaults) {
-    self.config = config
-  }
 
   func makeBody(configuration: Configuration) -> some View {
     Button {
@@ -40,7 +35,7 @@ struct ZenCheckboxStyle: ToggleStyle {
             isHovered = newValue
           })
         configuration.label
-          .font(config.font)
+          .font(font)
       }
     }
     .buttonStyle(.plain)

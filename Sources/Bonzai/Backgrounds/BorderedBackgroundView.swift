@@ -22,6 +22,12 @@ public struct BorderedOverlayView: View {
         .strokeBorder(color.opacity(0.5), lineWidth: 1)
         .padding(1.5)
     }
+    .mask {
+      LinearGradient(stops: [
+        .init(color: .black, location: 0),
+        .init(color: .black.opacity(0.25), location: 1),
+      ], startPoint: .top, endPoint: .bottom)
+    }
     .padding(.horizontal, 2)
     .opacity(opacity())
     .allowsHitTesting(false)

@@ -51,33 +51,18 @@ struct ButtonModifier: ViewModifier {
 
 
   func body(content: Content) -> some View {
-    let calm: Bool = overrideButtonCalm ?? calm
-    let foregroundColor: Color = overrideButtonForegroundColor ?? foregroundColor
-    let backgroundColor: Color = overrideButtonBackgroundColor ?? backgroundColor
-    let cornerRadius: CGFloat = overrideButtonCornerRadius ?? cornerRadius
-    let font: Font = overrideButtonFont ?? font
-    let glow: Bool = overrideButtonGlow ?? glow
-    let focusEffect: Bool = overrideButtonFocusEffect ?? focusEffect
-    let grayscaleEffect: Bool = overrideButtonGrayscaleEffect ?? grayscaleEffect
-    let hoverEffect: Bool = overrideButtonHoverEffect ?? hoverEffect
-    let padding: ButtonDefaults.Padding = overrideButtonPadding ?? ButtonDefaults.Padding.medium
-    let unfocusedOpacity: Double = overrideButtonUnfocusedOpacity ?? unfocusedOpacity
-
-    let config = ButtonDefaults(
-      backgroundColor: backgroundColor,
-      calm: calm,
-      cornerRadius: cornerRadius,
-      focusEffect: focusEffect,
-      font: font,
-      foregroundColor: foregroundColor,
-      glow: glow,
-      grayscaleEffect: grayscaleEffect,
-      hoverEffect: hoverEffect,
-      padding: padding,
-      unfocusedOpacity: unfocusedOpacity
-    )
-
-    content.buttonStyle(ZenButtonStyle(config))
+    content.buttonStyle(ZenButtonStyle())
+      .environment(\.buttonBackgroundColor, overrideButtonBackgroundColor ?? backgroundColor)
+      .environment(\.buttonForegroundColor, overrideButtonForegroundColor ?? foregroundColor)
+      .environment(\.buttonCalm, overrideButtonCalm ?? calm)
+      .environment(\.buttonCornerRadius, overrideButtonCornerRadius ?? cornerRadius)
+      .environment(\.buttonFocusEffect, overrideButtonFocusEffect ?? focusEffect)
+      .environment(\.buttonFont, overrideButtonFont ?? font)
+      .environment(\.buttonGlow, overrideButtonGlow ?? glow)
+      .environment(\.buttonGrayscaleEffect, overrideButtonGrayscaleEffect ?? grayscaleEffect)
+      .environment(\.buttonHoverEffect, overrideButtonHoverEffect ?? hoverEffect)
+      .environment(\.buttonPadding, overrideButtonPadding ?? padding)
+      .environment(\.buttonUnfocusedOpacity, overrideButtonUnfocusedOpacity ?? unfocusedOpacity)
   }
 }
 

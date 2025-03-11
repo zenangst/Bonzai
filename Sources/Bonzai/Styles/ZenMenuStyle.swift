@@ -1,69 +1,79 @@
 import SwiftUI
 
 struct ZenMenuStyle: MenuStyle {
-  private let config: MenuDefaults
-
-  init(_ config: MenuDefaults) {
-    self.config = config
-  }
+  @Environment(\.menuBackgroundColor) private var backgroundColor: Color
+  @Environment(\.menuCalm) private var calm: Bool
+  @Environment(\.menuCornerRadius) private var cornerRadius: CGFloat
+  @Environment(\.menuFocusEffect) private var focusEffect: Bool
+  @Environment(\.menuFont) private var font: Font
+  @Environment(\.menuForegroundColor) private var foregroundColor: Color
+  @Environment(\.menuGlow) private var glow:  Bool
+  @Environment(\.menuGrayscaleEffect) private var grayscaleEffect:  Bool
+  @Environment(\.menuHoverEffect) private var hoverEffect:  Bool
+  @Environment(\.menuPadding) private var padding: MenuDefaults.Padding
+  @Environment(\.menuUnfocusedOpacity) private var unfocusedOpacity :Double
 
   func makeBody(configuration: Configuration) -> some View {
-    ZenMenuStyleInternalView(configuration, config: config)
+    ZenMenuStyleInternalView(configuration)
+      .environment(\.font, font)
+      .environment(\.menuBackgroundColor, backgroundColor)
+      .environment(\.menuCalm, calm)
+      .environment(\.menuCornerRadius, cornerRadius)
+      .environment(\.menuFont, font)
+      .environment(\.menuForegroundColor, foregroundColor)
+      .environment(\.menuFocusEffect, focusEffect)
+      .environment(\.menuGlow, glow)
+      .environment(\.menuGrayscaleEffect, grayscaleEffect)
+      .environment(\.menuHoverEffect, hoverEffect)
+      .environment(\.menuPadding, padding)
+      .environment(\.menuUnfocusedOpacity, unfocusedOpacity)
   }
 }
 
 struct ZenMenuStyleInternalView: View {
+  @Environment(\.menuBackgroundColor) private var backgroundColor: Color
+  @Environment(\.menuCalm) private var calm: Bool
+  @Environment(\.menuCornerRadius) private var cornerRadius: CGFloat
+  @Environment(\.menuFocusEffect) private var focusEffect: Bool
+  @Environment(\.menuFont) private var font: Font
+  @Environment(\.menuForegroundColor) private var foregroundColor: Color
+  @Environment(\.menuGlow) private var glow:  Bool
+  @Environment(\.menuGrayscaleEffect) private var grayscaleEffect:  Bool
+  @Environment(\.menuHoverEffect) private var hoverEffect:  Bool
+  @Environment(\.menuPadding) private var padding: MenuDefaults.Padding
+  @Environment(\.menuUnfocusedOpacity) private var unfocusedOpacity :Double
+
   @Environment(\.controlActiveState) private var controlActiveState
   @Environment(\.colorScheme) private var colorScheme
 
   private let menuConfiguration: MenuStyleConfiguration
-  private let config: MenuDefaults
   @State private var isHovered: Bool
-  @Binding private var hoverEffect: Bool
 
-  init(_ menuConfiguration: MenuStyleConfiguration,
-       config: MenuDefaults) {
+  init(_ menuConfiguration: MenuStyleConfiguration) {
     self.menuConfiguration = menuConfiguration
-    self.config = config
-    _isHovered = .init(initialValue: config.hoverEffect ? false : true)
-    _hoverEffect = .init(get: { config.hoverEffect }, set: { _ in })
+    _isHovered = .init(initialValue: false)
   }
 
   var body: some View {
     Menu(menuConfiguration)
+      .font(font)
       .menuStyle(.borderlessButton)
-      .textStyle({ text in
-        text.font = config.font
-      })
-      .buttonStyle { button in
-        let menuButtonStyle = config.buttonConfig()
-        button.calm = menuButtonStyle.calm
-        button.backgroundColor = menuButtonStyle.backgroundColor
-        button.cornerRadius = menuButtonStyle.cornerRadius
-        button.font = menuButtonStyle.font
-        button.foregroundColor = menuButtonStyle.foregroundColor
-        button.glow = menuButtonStyle.glow
-        button.grayscaleEffect = menuButtonStyle.grayscaleEffect
-        button.hoverEffect = menuButtonStyle.hoverEffect
-        button.padding = menuButtonStyle.padding
-        button.unfocusedOpacity = menuButtonStyle.unfocusedOpacity
-      }
       .truncationMode(.middle)
       .foregroundStyle(foregroundStyle())
       .allowsTightening(true)
       .onHover(perform: { value in
-        guard config.hoverEffect else { return }
+        guard hoverEffect else { return }
         self.isHovered = value
       })
-      .padding(config.padding.edgeInsets)
+      .padding(padding.edgeInsets)
       .frame(minHeight: 16)
       .background(
         ZenStyleBackgroundView(
-          cornerRadius: config.cornerRadius,
-          calm: config.calm,
-          unfocusedOpacity: config.unfocusedOpacity,
+          cornerRadius: cornerRadius,
+          calm: calm,
+          unfocusedOpacity: unfocusedOpacity,
           isHovered: $isHovered,
-          color: config.backgroundColor
+          color: backgroundColor
         )
       )
       .grayscale(grayscale())
@@ -89,7 +99,7 @@ struct ZenMenuStyleInternalView: View {
   }
 
   private func grayscale() -> CGFloat {
-    config.grayscaleEffect ? isHovered ? 0
+    grayscaleEffect ? isHovered ? 0
     : isHovered ? 0.5 : 1
     : controlActiveState == .key ? 0 : 0.4
   }

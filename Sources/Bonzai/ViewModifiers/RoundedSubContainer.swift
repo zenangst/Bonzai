@@ -23,7 +23,6 @@ struct RoundedSubContainer: ViewModifier {
           .init(color: background(fraction: 0.015, of: .white), location: 0),
           .init(color: background(fraction: 0.015, of: .black), location: 1)
         ], startPoint: .top, endPoint: .bottom)
-        .drawingGroup()
       )
       .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
       .overlay(

@@ -28,7 +28,6 @@ struct ZenStyleBackgroundView: View {
               .opacity(strokeOpacity())
           }
       )
-      .drawingGroup()
   }
 
   private func fillOpacity() -> CGFloat {

@@ -15,8 +15,9 @@ struct TextModifier: ViewModifier {
 
   func body(content: Content) -> some View {
     content
-      .font(overrideTextFont ?? textFont)
-      .foregroundStyle(overrideTextColor ?? textColor)
+      .font(textFont)
+      .environment(\.textColor, overrideTextColor ?? textColor)
+      .environment(\.textFont, overrideTextFont ?? textFont)
   }
 }
 

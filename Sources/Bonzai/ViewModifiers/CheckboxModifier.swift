@@ -54,24 +54,20 @@ struct CheckboxModifier: ViewModifier {
   }
 
   func body(content: Content) -> some View {
-
-    let config = ToggleDefaults.init(
-      backgroundColor: overrideToggleBackgroundColor ?? backgroundColor,
-      calm: overrideToggleCalm ?? calm,
-      cornerRadius: overrideToggleCornerRadius ?? cornerRadius,
-      focusEffect: overrideToggleFocusEffect ?? focusEffect,
-      font: overrideToggleFont ?? font,
-      foregroundColor: overrideToggleForegroundColor ?? foregroundColor,
-      glow: overrideToggleGlow ?? glow,
-      grayscaleEffect: overrideToggleGrayscaleEffect ?? grayscaleEffect,
-      hoverEffect: overrideToggleHoverEffect ?? hoverEffect,
-      padding: overrideTogglePadding ?? padding,
-      style: overrideToggleStyle ?? style,
-      unfocusedOpacity: overrideToggleUnfocusedOpacity ?? unfocusedOpacity
-    )
-
     content
-      .toggleStyle(ZenCheckboxStyle(config: config))
+      .toggleStyle(ZenCheckboxStyle())
+      .environment(\.toggleBackgroundColor, overrideToggleBackgroundColor ?? backgroundColor)
+      .environment(\.toggleCalm, overrideToggleCalm ?? calm)
+      .environment(\.toggleCornerRadius, overrideToggleCornerRadius ?? cornerRadius)
+      .environment(\.toggleFocusEffect, overrideToggleFocusEffect ?? focusEffect)
+      .environment(\.toggleFont, overrideToggleFont ?? font)
+      .environment(\.toggleForegroundColor, overrideToggleForegroundColor ?? foregroundColor)
+      .environment(\.toggleGlow, overrideToggleGlow ?? glow)
+      .environment(\.toggleGrayscaleEffect, overrideToggleGrayscaleEffect ?? grayscaleEffect)
+      .environment(\.toggleHoverEffect, overrideToggleHoverEffect ?? hoverEffect)
+      .environment(\.togglePadding, overrideTogglePadding ?? padding)
+      .environment(\.toggleStyle, overrideToggleStyle ?? style)
+      .environment(\.toggleUnfocusedOpacity, overrideToggleUnfocusedOpacity ?? unfocusedOpacity)
       .environment(\.toggleStyle, overrideToggleStyle ?? .regular)
   }
 }

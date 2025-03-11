@@ -58,25 +58,21 @@ struct TextFieldModifier: ViewModifier {
   }
 
   func body(content: Content) -> some View {
-    let config = TextFieldDefaults(
-      backgroundColor: overrideTextFieldBackgroundColor ?? backgroundColor,
-      calm: overrideTextFieldCalm ?? calm,
-      color: overrideTextFieldForegroundColor ?? foregroundColor,
-      cornerRadius: overrideTextFieldCornerRadius ?? cornerRadius,
-      decorationColor: overrideTextFieldDecorationColor ?? decorationColor,
-      focusEffect: overrideTextFieldFocusEffect ?? focusEffect,
-      font: overrideTextFieldFont ?? font,
-      foregroundColor: overrideTextFieldForegroundColor ?? foregroundColor,
-      glow: overrideTextFieldGlow ?? glow,
-      grayscaleEffect: overrideTextFieldGrayscaleEffect ?? grayscaleEffect,
-      hoverEffect: overrideTextFieldHoverEffect ?? hoverEffect,
-      padding: overrideTextFieldPadding ?? padding,
-      style: overrideTextFieldStyle ?? style,
-      unfocusedOpacity: overrideTextFieldUnfocusedOpacity ?? unfocusedOpacity
-    )
-
-    content.textFieldStyle(ZenTextFieldStyle(config))
-  }
+    content
+      .textFieldStyle(ZenTextFieldStyle())
+      .environment(\.textFieldBackgroundColor, overrideTextFieldBackgroundColor ?? backgroundColor)
+      .environment(\.textFieldCalm, overrideTextFieldCalm ?? calm)
+      .environment(\.textFieldCornerRadius, overrideTextFieldCornerRadius ?? cornerRadius)
+      .environment(\.textFieldDecorationColor, overrideTextFieldDecorationColor ?? decorationColor)
+      .environment(\.textFieldFocusEffect, overrideTextFieldFocusEffect ?? focusEffect)
+      .environment(\.textFieldFont, overrideTextFieldFont ?? font)
+      .environment(\.textFieldForegroundColor, overrideTextFieldForegroundColor ?? foregroundColor)
+      .environment(\.textFieldGlow, overrideTextFieldGlow ?? glow)
+      .environment(\.textFieldGrayscaleEffect, overrideTextFieldGrayscaleEffect ?? grayscaleEffect)
+      .environment(\.textFieldHoverEffect, overrideTextFieldHoverEffect ?? hoverEffect)
+      .environment(\.textFieldPadding, overrideTextFieldPadding ?? padding)
+      .environment(\.textFieldStyle, overrideTextFieldStyle ?? style)
+    .environment(\.textFieldUnfocusedOpacity, overrideTextFieldUnfocusedOpacity ?? unfocusedOpacity)  }
 }
 
 public extension View {

@@ -174,6 +174,7 @@ public struct HierarchyStyleViewModifier: ViewModifier {
           .padding(.horizontal, level.padding(in: section).horizontal)
           .padding(.vertical, level.padding(in: section).vertical)
       }
+    // MARK: Detail
     case .detail:
       switch level {
       case .root:
@@ -231,20 +232,19 @@ public struct HierarchyStyleViewModifier: ViewModifier {
       case .item:
         content
           .modifier(Debugger(color: level.color))
-          .textStyle { text in
-            text.font = .body
-          }
           .textFieldStyle({ textField in
             textField.style = .roundedBorder
             textField.backgroundColor = .clear
           })
-          .buttonStyle { button in
-            button.font = .caption2
-            button.cornerRadius = 4
-          }
           .menuStyle { menu in
-            menu.font = .caption2
+            menu.font = .caption
             menu.cornerRadius = 4
+            menu.padding = .medium
+          }
+          .buttonStyle { button in
+            button.font = .caption
+            button.cornerRadius = 4
+            button.padding = .medium
           }
           .padding(.horizontal, level.padding(in: section).horizontal)
           .padding(.vertical, level.padding(in: section).vertical)
@@ -264,7 +264,8 @@ public struct HierarchyStyleViewModifier: ViewModifier {
             checkbox.style = .small
           }
           .menuStyle { menu in
-            menu.calm = false
+            menu.calm = true
+            menu.unfocusedOpacity = 0
             menu.font = .caption2
             menu.cornerRadius = 4
             menu.padding = .small

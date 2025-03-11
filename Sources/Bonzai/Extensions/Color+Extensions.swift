@@ -37,7 +37,7 @@ public extension Color {
   static var darkText: Color { .init(NSColor.selectedTextColor) }
 }
 
-extension Color {
+public extension Color {
   var nsBackgroundColor: NSColor {
     if let cgColor = cgColor, let nsColor = NSColor(cgColor: cgColor) {
       return nsColor
@@ -73,5 +73,6 @@ extension Color {
     let blendedGreen = components.green * (1.0 - fraction) + blendColor.components.green * fraction
     let blendedBlue = components.blue * (1.0 - fraction) + blendColor.components.blue * fraction
     return Color(red: blendedRed, green: blendedGreen, blue: blendedBlue, opacity: 1.0)
-  }}
+  }
+}
 
