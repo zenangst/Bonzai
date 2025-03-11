@@ -7,7 +7,7 @@ struct TextFontOverride: EnvironmentKey {
   static let defaultValue: Font = Styles.config.text.font
 }
 
-extension EnvironmentValues {
+public extension EnvironmentValues {
   var textColor: Color {
     get { self[TextColorOverride.self] }
     set { self[TextColorOverride.self] = newValue }

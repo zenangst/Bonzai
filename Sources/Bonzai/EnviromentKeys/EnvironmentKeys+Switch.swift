@@ -48,7 +48,7 @@ struct switchUnfocusedOpacityOverride: EnvironmentKey {
   static let defaultValue: Double = Styles.config.switch.unfocusedOpacity
 }
 
-extension EnvironmentValues {
+public extension EnvironmentValues {
   var switchBackgroundColor: Color {
     get { self[switchBackgroundColorOverride.self] }
     set { self[switchBackgroundColorOverride.self] = newValue }

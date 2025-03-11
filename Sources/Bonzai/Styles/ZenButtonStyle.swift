@@ -18,8 +18,12 @@ struct ZenButtonStyle: ButtonStyle {
   @Environment(\.colorScheme) private var colorScheme
   @Environment(\.controlActiveState) private var controlActiveState
 
-  init() {
-    _isHovered = .init(initialValue: false)
+  init(hoverEffect: Bool?) {
+    if hoverEffect == false {
+      _isHovered = .init(initialValue: true)
+    } else {
+      _isHovered = .init(initialValue: false)
+    }
   }
 
   func makeBody(configuration: Configuration) -> some View {
@@ -139,10 +143,10 @@ struct ZenButtonStyle_Previews: PreviewProvider {
         ForEach(colors, id: \.self) { color in
           Button(action: {}, label: { Text("Light button") })
             .environment(\.colorScheme, .light)
-            .buttonStyle { $0.backgroundColor = color }
+            .environment(\.buttonBackgroundColor, color)
           Button(action: {}, label: { Text("Dark button") })
             .environment(\.colorScheme, .dark)
-            .buttonStyle { $0.backgroundColor = color }
+            .environment(\.buttonBackgroundColor, color)
         }
       }
     }

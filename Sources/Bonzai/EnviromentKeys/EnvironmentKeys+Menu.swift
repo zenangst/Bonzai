@@ -44,7 +44,7 @@ struct menuUnfocusedOpacityOverride: EnvironmentKey {
   static let defaultValue: Double = Styles.config.menu.unfocusedOpacity
 }
 
-extension EnvironmentValues {
+public extension EnvironmentValues {
   var menuBackgroundColor: Color {
     get { self[menuBackgroundColorOverride.self] }
     set { self[menuBackgroundColorOverride.self] = newValue }

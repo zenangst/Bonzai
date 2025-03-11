@@ -11,6 +11,7 @@ public extension Color {
   static var systemPink: Color { .init(NSColor.systemPink) }
   static var systemTeal: Color { .init(NSColor.systemTeal) }
   static var systemGray: Color { .init(NSColor.systemGray) }
+  static var systemBrown: Color { .init(NSColor.systemBrown) }
 
   static var label: Color { .init(NSColor.labelColor) }
   static var secondaryLabel: Color { .init(NSColor.secondaryLabelColor) }

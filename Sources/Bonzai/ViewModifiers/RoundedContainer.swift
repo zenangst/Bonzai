@@ -43,7 +43,7 @@ struct RoundedContainer: ViewModifier {
           .allowsHitTesting(false)
       )
       .compositingGroup()
-      .shadow(color: shadowColor(), radius: 2, y: 2)
+      .shadow(color: shadowColor(), radius: 4, y: -2)
       .padding(.horizontal, 2)
   }
 
@@ -61,7 +61,7 @@ struct RoundedContainer: ViewModifier {
 
   private func shadowColor() -> Color {
     colorScheme == .dark
-      ? Color(.sRGBLinear, white: 0, opacity: 0.3)
+      ? Color(.sRGBLinear, white: 0, opacity: 0.2)
       : Color(.sRGBLinear, white: 0, opacity: 0.1)
   }
 }

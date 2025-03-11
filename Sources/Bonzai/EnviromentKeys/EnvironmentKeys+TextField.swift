@@ -56,7 +56,7 @@ struct textFieldUnfocusedOpacityOverride: EnvironmentKey {
   static let defaultValue: Double = Styles.config.textField.unfocusedOpacity
 }
 
-extension EnvironmentValues {
+public extension EnvironmentValues {
   var textFieldBackgroundColor: Color {
     get { self[textFieldBackgroundColorOverride.self] }
     set { self[textFieldBackgroundColorOverride.self] = newValue }

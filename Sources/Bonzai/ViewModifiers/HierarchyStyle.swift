@@ -121,13 +121,10 @@ public struct HierarchyStyleViewModifier: ViewModifier {
           .padding(.top, level.padding(in: section).vertical)
           .padding(.bottom, nextLevel(level).padding(in: section).vertical)
           .textStyle()
-          .buttonStyle {
-            $0.calm = true
-          }
-          .menuStyle {
-            $0.color = .accentColor
-            $0.calm = true
-          }
+          .environment(\.buttonCalm, true)
+          .environment(\.menuCalm, true)
+          .buttonStyle()
+          .menuStyle()
       case .primary:
         content
           .modifier(Debugger(color: level.color))
@@ -160,9 +157,7 @@ public struct HierarchyStyleViewModifier: ViewModifier {
         content
           .modifier(Debugger(color: level.color))
           .textStyle()
-          .menuStyle { menu in
-            menu.padding = .small
-          }
+          .environment(\.menuPadding, .small)
           .padding(.horizontal, level.padding(in: section).horizontal)
           .padding(.vertical, level.padding(in: section).vertical)
           .environment(\.textFont, .body)
@@ -199,29 +194,19 @@ public struct HierarchyStyleViewModifier: ViewModifier {
       case .tertiary:
         content
           .modifier(Debugger(color: level.color))
-          .textFieldStyle({ textField in
-            textField.style = .roundedBorder
-            textField.decorationColor = .clear
-            textField.backgroundColor = .clear
-            textField.padding = .small
-          })
-          .textStyle { text in
-            text.font = .caption2
-          }
-          .checkboxStyle { checkbox in
-            checkbox.style = .small
-          }
-          .menuStyle { menu in
-            menu.calm = false
-            menu.font = .caption2
-            menu.cornerRadius = 4
-            menu.padding = .medium
-          }
-          .buttonStyle { button in
-            button.calm = false
-            button.font = .caption2
-            button.padding = .medium
-          }
+          .environment(\.menuCalm, false)
+          .environment(\.menuCalm, false)
+          .environment(\.menuCornerRadius, 4)
+          .environment(\.menuFont, .caption2)
+          .environment(\.menuFont, .caption2)
+          .environment(\.menuPadding, .medium)
+          .environment(\.menuPadding, .medium)
+          .environment(\.textFieldBackgroundColor, .clear)
+          .environment(\.textFieldDecorationColor, .clear)
+          .environment(\.textFieldPadding, .small)
+          .environment(\.textFieldStyle, .roundedBorder)
+          .environment(\.textFont, .caption2)
+          .environment(\.toggleStyle, .small)
           .padding(.horizontal, level.padding(in: section).horizontal)
           .padding(.vertical, level.padding(in: section).vertical)
       case .list:
@@ -232,50 +217,41 @@ public struct HierarchyStyleViewModifier: ViewModifier {
       case .item:
         content
           .modifier(Debugger(color: level.color))
-          .textFieldStyle({ textField in
-            textField.style = .roundedBorder
-            textField.backgroundColor = .clear
-          })
-          .menuStyle { menu in
-            menu.font = .caption
-            menu.cornerRadius = 4
-            menu.padding = .medium
-          }
-          .buttonStyle { button in
-            button.font = .caption
-            button.cornerRadius = 4
-            button.padding = .medium
-          }
+          .environment(\.buttonCornerRadius, 4)
+          .environment(\.buttonFont, .caption)
+          .environment(\.buttonPadding, .medium)
+          .environment(\.menuBackgroundColor, .systemGray)
+          .environment(\.menuCalm, true)
+          .environment(\.menuCornerRadius, 4)
+          .environment(\.menuFocusEffect, true)
+          .environment(\.menuFont, .caption)
+          .environment(\.menuHoverEffect, true)
+          .environment(\.menuPadding, .medium)
+          .environment(\.menuUnfocusedOpacity, 0.1)
+          .environment(\.textFieldBackgroundColor, .clear)
+          .environment(\.textFieldStyle, .roundedBorder)
           .padding(.horizontal, level.padding(in: section).horizontal)
           .padding(.vertical, level.padding(in: section).vertical)
       case .subItem:
         content
           .modifier(Debugger(color: level.color))
-          .textFieldStyle({ textField in
-            textField.style = .roundedBorder
-            textField.decorationColor = .clear
-            textField.backgroundColor = .clear
-            textField.padding = .small
-          })
-          .textStyle { text in
-            text.font = .caption2
-          }
-          .checkboxStyle { checkbox in
-            checkbox.style = .small
-          }
-          .menuStyle { menu in
-            menu.calm = true
-            menu.unfocusedOpacity = 0
-            menu.font = .caption2
-            menu.cornerRadius = 4
-            menu.padding = .small
-          }
-          .buttonStyle { button in
-            button.calm = true
-            button.font = .caption2
-            button.cornerRadius = 4
-            button.padding = .small
-          }
+          .environment(\.buttonCalm, true)
+          .environment(\.buttonCornerRadius, 4)
+          .environment(\.buttonFont, .caption2)
+          .environment(\.buttonPadding, .small)
+          .environment(\.menuCalm, true)
+          .environment(\.menuCornerRadius, 4)
+          .environment(\.menuFocusEffect, true)
+          .environment(\.menuFont, .caption2)
+          .environment(\.menuHoverEffect, true)
+          .environment(\.menuPadding, .small)
+          .environment(\.menuUnfocusedOpacity, 0)
+          .environment(\.textFieldBackgroundColor, .clear)
+          .environment(\.textFieldDecorationColor, .clear)
+          .environment(\.textFieldPadding, .small)
+          .environment(\.textFieldStyle, .roundedBorder)
+          .environment(\.textFont, .caption2)
+          .environment(\.toggleStyle, .small)
           .padding(.horizontal, level.padding(in: section).horizontal)
           .padding(.vertical, level.padding(in: section).vertical)
       }

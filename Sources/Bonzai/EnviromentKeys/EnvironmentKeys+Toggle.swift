@@ -48,7 +48,7 @@ struct toggleUnfocusedOpacityOverride: EnvironmentKey {
   static let defaultValue: Double = Styles.config.toggle.unfocusedOpacity
 }
 
-extension EnvironmentValues {
+public extension EnvironmentValues {
   var toggleBackgroundColor: Color {
     get { self[toggleBackgroundColorOverride.self] }
     set { self[toggleBackgroundColorOverride.self] = newValue }

@@ -155,9 +155,7 @@ struct ZenMenuStyle_Previews: PreviewProvider {
           Menu("Dark menu", content: { Text("Hello") })
             .environment(\.colorScheme, .dark)
         }
-        .menuStyle { style in
-          style.backgroundColor = color
-        }
+        .environment(\.menuBackgroundColor, color)
       }
     }
     .frame(width: 600)

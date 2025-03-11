@@ -20,61 +20,64 @@ struct ZenTextFieldStyle: TextFieldStyle {
   @Environment(\.textFieldUnfocusedOpacity) var unfocusedOpacity
 
   func _body(configuration: TextField<_Label>) -> some View {
-    HStack {
-      applyTextfieldStyle(configuration)
-        .background(backgroundColor)
-        .font(font)
-        .background(
-          RoundedRectangle(cornerRadius: 7)
-            .stroke(Color(isFocused ? decorationColor.nsForegroundColor : .windowFrameTextColor), lineWidth: 2)
-            .padding(-2)
-            .opacity(isFocused ? 0.5 : unfocusedOpacity)
-        )
-        .background(
-          RoundedRectangle(cornerRadius: 6)
-            .strokeBorder(decorationColor.opacity(0.5), lineWidth: 2)
-            .padding(-1)
-            .opacity(isFocused ? 0.5 : unfocusedOpacity)
-        )
-        .overlay(
-          RoundedRectangle(cornerRadius: 4)
-            .stroke(Color(isFocused ? decorationColor.nsForegroundColor : .windowFrameTextColor), lineWidth: 2)
-            .animation(.easeInOut(duration: 0.25), value: isFocused)
-            .compositingGroup()
-            .shadow(color: isFocused ? decorationColor : .clear, radius: 2)
-            .padding(-2)
-            .opacity(
-              glow ? (isFocused ? 0.75 : isHovered ? 0.25 : 0) : 0)
-        )
-        .compositingGroup()
-        .grayscale(grayscale())
-        .animation(.easeInOut(duration: 0.25), value: isHovered)
-        .animation(.easeInOut(duration: 0.25), value: isFocused)
-        .compositingGroup()
-        .onHover(perform: { newValue in
-          isHovered = newValue
-        })
-        .focused($isFocused)
-    }
+    applyTextfieldStyle(configuration)
   }
 
   @ViewBuilder
   private func applyTextfieldStyle(_ configuration: TextField<_Label>) -> some View {
     switch style {
     case .automatic:
-      configuration
+      applyStyle(configuration)
         .textFieldStyle(.automatic)
     case .plain:
-      configuration
+      applyStyle(configuration)
         .textFieldStyle(.plain)
         .padding(padding.edgeInsets)
     case .roundedBorder:
-      configuration
+      applyStyle(configuration)
         .textFieldStyle(.roundedBorder)
     case .squareBorder:
-      configuration
+      applyStyle(configuration)
         .textFieldStyle(.squareBorder)
     }
+  }
+
+  @ViewBuilder
+  private func applyStyle(_ content: TextField<ZenTextFieldStyle._Label>) -> some View {
+    content
+      .background(backgroundColor)
+      .font(font)
+      .background(
+        RoundedRectangle(cornerRadius: 7)
+          .stroke(Color(isFocused ? decorationColor.nsForegroundColor : .windowFrameTextColor), lineWidth: 2)
+          .padding(-2)
+          .opacity(isFocused ? 0.5 : unfocusedOpacity)
+      )
+      .background(
+        RoundedRectangle(cornerRadius: 6)
+          .strokeBorder(decorationColor.opacity(0.5), lineWidth: 2)
+          .padding(-1)
+          .opacity(isFocused ? 0.5 : unfocusedOpacity)
+      )
+      .overlay(
+        RoundedRectangle(cornerRadius: 4)
+          .stroke(Color(isFocused ? decorationColor.nsForegroundColor : .windowFrameTextColor), lineWidth: 2)
+          .animation(.easeInOut(duration: 0.25), value: isFocused)
+          .compositingGroup()
+          .shadow(color: isFocused ? decorationColor : .clear, radius: 2)
+          .padding(-2)
+          .opacity(
+            glow ? (isFocused ? 0.75 : isHovered ? 0.25 : 0) : 0)
+      )
+      .compositingGroup()
+      .grayscale(grayscale())
+      .animation(.easeInOut(duration: 0.25), value: isHovered)
+      .animation(.easeInOut(duration: 0.25), value: isFocused)
+      .compositingGroup()
+      .onHover(perform: { newValue in
+        isHovered = newValue
+      })
+      .focused($isFocused)
   }
 
   private func grayscale() -> CGFloat {
@@ -102,17 +105,13 @@ struct ZenTextFieldStyle_Preview: PreviewProvider {
         TextField("Regular TextField", text: .constant(""))
 
         TextField("Large TextField", text: .constant(""))
-          .textFieldStyle {
-            $0.font = .largeTitle
-          }
+          .environment(\.textFieldFont, .largeTitle)
 
         TextField("Zen TextField", text: .constant(""))
           .textFieldStyle()
 
         TextField("Zen TextField colored", text: .constant(""))
-          .textFieldStyle {
-            $0.decorationColor = .systemPurple
-          }
+          .environment(\.textFieldDecorationColor, .systemPurple)
       }
       .environment(\.colorScheme, .dark)
     }
