@@ -7,7 +7,7 @@ struct TextFieldModifier: ViewModifier {
   }
 }
 
-extension View {
+public extension View {
   func textFieldStyle() -> some View {
     self.modifier(TextFieldModifier())
   }

@@ -14,7 +14,7 @@ struct SwitchModifier: ViewModifier {
 }
 
 public extension View {
-  func switchStyle() -> some View {
-    self.modifier(SwitchModifier())
+  func switchStyle(_ style: SwitchDefaults.Style? = nil) -> some View {
+    self.modifier(SwitchModifier(overrideSwitchStyle: style))
   }
 }
