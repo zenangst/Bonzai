@@ -77,8 +77,16 @@ struct ZenButtonStyle: ButtonStyle {
       .offset(y: configuration.isPressed ? 0.5 : 0.0)
       .animation(.easeOut(duration: 0.1), value: configuration.isPressed)
       .animation(.easeOut(duration: 0.1), value: isHovered)
+      .onAppear {
+        if hoverEffect == false {
+          isHovered = true
+        }
+      }
       .onHover(perform: { value in
-        guard hoverEffect else { return }
+        guard hoverEffect else {
+          isHovered = true
+          return
+        }
         guard self.isHovered != value else { return }
         self.isHovered = value
       })
