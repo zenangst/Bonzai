@@ -27,12 +27,11 @@ struct ZenTextFieldStyle: TextFieldStyle {
   private func applyTextfieldStyle(_ configuration: TextField<_Label>) -> some View {
     switch style {
     case .automatic:
-      applyStyle(configuration)
+      applyStyle(configuration, padding: padding.edgeInsets)
         .textFieldStyle(.automatic)
     case .plain:
-      applyStyle(configuration)
+      applyStyle(configuration, padding: padding.edgeInsets)
         .textFieldStyle(.plain)
-        .padding(padding.edgeInsets)
     case .roundedBorder:
       applyStyle(configuration)
         .textFieldStyle(.roundedBorder)
@@ -43,8 +42,9 @@ struct ZenTextFieldStyle: TextFieldStyle {
   }
 
   @ViewBuilder
-  private func applyStyle(_ content: TextField<ZenTextFieldStyle._Label>) -> some View {
+  private func applyStyle(_ content: TextField<ZenTextFieldStyle._Label>, padding: EdgeInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0)) -> some View {
     content
+      .padding(padding)
       .background(backgroundColor)
       .font(font)
       .background(
