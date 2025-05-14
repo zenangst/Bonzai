@@ -8,7 +8,6 @@ public struct ZenLabel<Content>: View where Content: View {
   }
 
   private let style: Style
-  @ViewBuilder
   private let content: () -> Content
 
   public init(_ text: String, style: Style = .detail) where Content == Text {

@@ -302,7 +302,6 @@ public enum HierarchyStyle {
 }
 
 public extension View {
-  @ViewBuilder
   func defaultStyle() -> some View {
     self
       .buttonStyle()

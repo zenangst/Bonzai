@@ -1,7 +1,6 @@
 import SwiftUI
 
 public extension View {
-  @ViewBuilder
   func focusable<T: Hashable>(_ focus: FocusState<T?>.Binding, as value: T, onFocus: @escaping () -> Void) -> some View {
     ZStack {
       self

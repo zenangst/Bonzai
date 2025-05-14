@@ -16,7 +16,6 @@ public enum PredefinedButtonStyle {
 }
 
 extension View {
-  @ViewBuilder
   func buttonStyle() -> some View {
     self.modifier(ButtonModifier())
   }

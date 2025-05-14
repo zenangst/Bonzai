@@ -13,20 +13,11 @@ struct ZenStyleBackgroundView: View {
     RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
       .fill(LinearGradient(
         stops: Gradient.Stop.zen(colorScheme, isHovered: isHovered, color: color),
-        startPoint: .top, endPoint: .bottom)
-      )
+        startPoint: .top, endPoint: .bottom))
       .opacity(fillOpacity())
       .background(
-        LinearGradient(stops: [
-          .init(color: strokeColor().blended(withFraction: 0.75, of: .systemGray), location: 0),
-          .init(color: strokeColor().blended(withFraction: 0.4, of: .systemGray), location: 0.5)
-        ], startPoint: .top, endPoint: .bottom)
-          .mask {
-            RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-              .stroke(strokeColor(), lineWidth: 1)
-              .padding(1)
-              .opacity(strokeOpacity())
-          }
+        BackgroundView(cornerRadius: cornerRadius, calm: calm,
+                       unfocusedOpacity: unfocusedOpacity, isHovered: $isHovered)
       )
   }
 
@@ -37,6 +28,27 @@ struct ZenStyleBackgroundView: View {
 
     return isHovered ? 1.0
                      : colorScheme == .light ? 0.7 : 0.3
+  }
+}
+
+private struct BackgroundView: View {
+  @Environment(\.colorScheme) var colorScheme
+  let cornerRadius: CGFloat
+  let calm: Bool
+  let unfocusedOpacity: CGFloat
+  @Binding var isHovered: Bool
+
+  var body: some View {
+    LinearGradient(stops: [
+      .init(color: strokeColor().blended(withFraction: 0.75, of: .systemGray), location: 0),
+      .init(color: strokeColor().blended(withFraction: 0.4, of: .systemGray), location: 0.5)
+    ], startPoint: .top, endPoint: .bottom)
+    .mask {
+      RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+        .stroke(strokeColor(), lineWidth: 1)
+        .padding(1)
+        .opacity(strokeOpacity())
+    }
   }
 
   private func strokeOpacity() -> CGFloat {

@@ -41,7 +41,6 @@ struct ZenTextFieldStyle: TextFieldStyle {
     }
   }
 
-  @ViewBuilder
   private func applyStyle(_ content: TextField<ZenTextFieldStyle._Label>, padding: EdgeInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0)) -> some View {
     content
       .padding(padding)

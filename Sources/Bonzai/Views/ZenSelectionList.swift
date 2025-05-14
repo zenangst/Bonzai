@@ -4,7 +4,7 @@ public struct ZenSelectionList<Content: View, Selection: Hashable>: View {
   @Binding private var selection: Selection
   private let content: () -> Content
 
-  public init(_ selection: Binding<Selection>, @ViewBuilder content: @escaping () -> Content) {
+  public init(_ selection: Binding<Selection>, content: @escaping () -> Content) {
     _selection = selection
     self.content = content
   }

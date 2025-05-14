@@ -11,10 +11,15 @@ public struct ZenDivider: View {
   public var body: some View {
     switch axis {
     case .horizontal:
-      VStack(spacing: 0, content: { content(firstColor: darkerColor(), secondColor: lighterColor()) })
+      VStack(spacing: 0) {
+        ColoredDivider(color: darkerColor())
+        ColoredDivider(color: lighterColor())
+      }
     case .vertical:
-      HStack(spacing: 0, content: { content(firstColor: lighterColor(),
-                                            secondColor: darkerColor()) })
+      HStack(spacing: 0, content: {
+        ColoredDivider(color: lighterColor())
+        ColoredDivider(color: darkerColor())
+      })
     }
   }
 
@@ -29,20 +34,22 @@ public struct ZenDivider: View {
     ? .gray
     : Color(nsColor: .systemGray.withSystemEffect(.disabled))
   }
+}
+
+private struct ColoredDivider: View {
+  @Environment(\.colorScheme) var colorScheme
+  let color: Color
+
+  var body: some View {
+    Divider()
+      .foregroundColor(color)
+      .opacity(opacity())
+  }
 
   private func opacity() -> CGFloat {
     colorScheme == .dark
     ? 0.5
     : 1.0
   }
-
-  @ViewBuilder
-  private func content(firstColor: Color, secondColor: Color) -> some View {
-    Divider()
-      .foregroundColor(firstColor)
-      .opacity(opacity())
-    Divider()
-      .foregroundColor(secondColor)
-      .opacity(opacity())
-  }
 }
+

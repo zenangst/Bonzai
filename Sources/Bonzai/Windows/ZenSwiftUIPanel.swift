@@ -6,7 +6,7 @@ open class ZenSwiftUIPanel<Content>: NSPanel where Content: View {
 
   public init(contentRect: NSRect = .zero, styleMask style: NSWindow.StyleMask,
               overrides: ZenSwiftUIWindowOverrides = .init(canBecomeKey: true, canBecomeMain: false),
-              @ViewBuilder content rootView: () -> Content) {
+              content rootView: () -> Content) {
     let rootView = rootView().defaultStyle()
     let hostingController = NSHostingController(rootView: rootView)
     self.sizeFitting = { hostingController.sizeThatFits(in: $0) }
