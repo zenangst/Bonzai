@@ -10,7 +10,7 @@ public struct ZenSwiftUIWindowOverrides {
   }
 }
 
-open class ZenSwiftUIWindow<Content>: NSWindow where Content: View {
+open class ZenSwiftUIWindow<Content>: NSWindow, SizeFitting where Content: View {
   private let sizeFitting: (_ size: CGSize) -> CGSize
   public var overrides: ZenSwiftUIWindowOverrides
 
@@ -43,6 +43,6 @@ open class ZenSwiftUIWindow<Content>: NSWindow where Content: View {
   open override var canBecomeMain: Bool { overrides.canBecomeMain }
 }
 
-protocol SizeFitting: NSWindow {
+public protocol SizeFitting: NSWindow {
   func sizeThatFits(in size: CGSize) -> CGSize
 }
