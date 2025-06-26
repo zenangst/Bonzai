@@ -96,11 +96,11 @@ public struct ButtonDefaults {
       cornerRadius: 4,
       focusEffect: false,
       font: .body,
-      foregroundColor: Color.white,
+      foregroundColor: Color.primary,
       glow: false,
       grayscaleEffect: false,
       hoverEffect:  true,
-      padding: .small,
+      padding: .medium,
       unfocusedOpacity: 0.1
     )
   }

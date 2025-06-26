@@ -29,6 +29,7 @@ struct ZenButtonStyle: ButtonStyle {
   func makeBody(configuration: Configuration) -> some View {
     configuration.label
       .font(font)
+      .frame(minHeight: 15)
       .padding(padding.edgeInsets)
       .foregroundColor(foregroundColor())
       .background(

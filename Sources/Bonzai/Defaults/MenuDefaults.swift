@@ -56,29 +56,6 @@ public struct MenuDefaults {
       unfocusedOpacity: 0.1)
   }
 
-   func buttonConfig() -> ButtonDefaults {
-     let buttonPadding: ButtonDefaults.Padding = switch padding {
-     case .extraLarge: .extraLarge
-     case .large: .large
-     case .medium: .medium
-     case .small: .small
-     case .mini: .mini
-     }
-
-    return ButtonDefaults(
-      backgroundColor: backgroundColor,
-      calm: calm,
-      cornerRadius: cornerRadius,
-      focusEffect: focusEffect,
-      font: font,
-      foregroundColor: foregroundColor,
-      glow: glow,
-      grayscaleEffect: grayscaleEffect,
-      hoverEffect: hoverEffect,
-      padding: buttonPadding,
-      unfocusedOpacity: unfocusedOpacity)
-  }
-
   public enum Padding {
     static var extraLargeValue: CGFloat = 16
     static var largeValue: CGFloat = 12

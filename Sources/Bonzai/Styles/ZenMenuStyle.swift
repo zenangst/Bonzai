@@ -87,9 +87,8 @@ struct ZenMenuStyleInternalView: View {
   }
 
   private func foregroundStyle() -> Color {
-    isHovered
-    ? Color(.white)
-    : Color(colorScheme == .dark ? .textColor : .textColor)
+    foregroundColor
+      .opacity(hoverEffect ? isHovered ? 1 : 0.5 : 1)
   }
 
   private func shadowOpacity() -> CGFloat {
