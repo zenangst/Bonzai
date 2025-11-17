@@ -32,10 +32,19 @@ public final class ZenPanel<Content>: NSPanel where Content: View {
 
     let rootView = rootView()
       .environmentObject(manager)
+      .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
       .ignoresSafeArea()
 
-    let contentViewController = NSHostingController(rootView: rootView)
-    self.contentViewController = contentViewController
+    let hostingView = NSHostingView(rootView: rootView)
+    let container = NSView(frame: contentRect)
+    container.wantsLayer = true
+    container.layer?.backgroundColor = NSColor.clear.cgColor
+    container.addSubview(hostingView)
+
+    hostingView.frame = container.bounds
+
+    contentView = container
+
     setFrame(contentRect, display: false)
   }
 }
