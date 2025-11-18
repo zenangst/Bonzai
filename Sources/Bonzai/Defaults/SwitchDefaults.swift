@@ -103,7 +103,7 @@ public struct SwitchDefaults {
     SwitchDefaults(
       backgroundColor: Color.systemGreen,
       calm: false,
-      cornerRadius: 4,
+      cornerRadius: Globals.isLiquidGlass ? 32 : 4,
       focusEffect: false,
       font: .body,
       foregroundColor: Color.white,

@@ -45,7 +45,7 @@ public struct MenuDefaults {
       backgroundColor: Color.gray,
       calm: false,
       color: Color.gray,
-      cornerRadius: 4,
+      cornerRadius: Globals.isLiquidGlass ? 32 : 4,
       focusEffect: false,
       font: .body,
       foregroundColor: Color.primary,
