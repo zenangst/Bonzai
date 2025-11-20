@@ -217,12 +217,12 @@ public struct HierarchyStyleViewModifier: ViewModifier {
       case .item:
         content
           .modifier(Debugger(color: level.color))
-          .environment(\.buttonCornerRadius, 4)
+          .environment(\.buttonCornerRadius, Globals.isLiquidGlass ? 32 : 4)
           .environment(\.buttonFont, .caption)
           .environment(\.buttonPadding, .medium)
           .environment(\.menuBackgroundColor, .systemGray)
           .environment(\.menuCalm, true)
-          .environment(\.menuCornerRadius, 4)
+          .environment(\.menuCornerRadius, Globals.isLiquidGlass ? 32 : 4)
           .environment(\.menuFocusEffect, true)
           .environment(\.menuFont, .caption)
           .environment(\.menuHoverEffect, true)
@@ -236,11 +236,11 @@ public struct HierarchyStyleViewModifier: ViewModifier {
         content
           .modifier(Debugger(color: level.color))
           .environment(\.buttonCalm, true)
-          .environment(\.buttonCornerRadius, 4)
+          .environment(\.buttonCornerRadius, Globals.isLiquidGlass ? 32 : 4)
           .environment(\.buttonFont, .caption2)
           .environment(\.buttonPadding, .small)
           .environment(\.menuCalm, true)
-          .environment(\.menuCornerRadius, 4)
+          .environment(\.menuCornerRadius, Globals.isLiquidGlass ? 32 : 4)
           .environment(\.menuFocusEffect, true)
           .environment(\.menuFont, .caption2)
           .environment(\.menuHoverEffect, true)

@@ -7,14 +7,15 @@ struct ZenMenuStyle: MenuStyle {
   @Environment(\.menuFocusEffect) private var focusEffect: Bool
   @Environment(\.menuFont) private var font: Font
   @Environment(\.menuForegroundColor) private var foregroundColor: Color
-  @Environment(\.menuGlow) private var glow:  Bool
-  @Environment(\.menuGrayscaleEffect) private var grayscaleEffect:  Bool
-  @Environment(\.menuHoverEffect) private var hoverEffect:  Bool
+  @Environment(\.menuGlow) private var glow: Bool
+  @Environment(\.menuGrayscaleEffect) private var grayscaleEffect: Bool
+  @Environment(\.menuHoverEffect) private var hoverEffect: Bool
   @Environment(\.menuPadding) private var padding: MenuDefaults.Padding
-  @Environment(\.menuUnfocusedOpacity) private var unfocusedOpacity :Double
+  @Environment(\.menuUnfocusedOpacity) private var unfocusedOpacity: Double
 
   func makeBody(configuration: Configuration) -> some View {
     ZenMenuStyleInternalView(configuration)
+      .frame(maxWidth: .infinity)
       .environment(\.font, font)
       .environment(\.menuBackgroundColor, backgroundColor)
       .environment(\.menuCalm, calm)
@@ -37,11 +38,11 @@ struct ZenMenuStyleInternalView: View {
   @Environment(\.menuFocusEffect) private var focusEffect: Bool
   @Environment(\.menuFont) private var font: Font
   @Environment(\.menuForegroundColor) private var foregroundColor: Color
-  @Environment(\.menuGlow) private var glow:  Bool
-  @Environment(\.menuGrayscaleEffect) private var grayscaleEffect:  Bool
-  @Environment(\.menuHoverEffect) private var hoverEffect:  Bool
+  @Environment(\.menuGlow) private var glow: Bool
+  @Environment(\.menuGrayscaleEffect) private var grayscaleEffect: Bool
+  @Environment(\.menuHoverEffect) private var hoverEffect: Bool
   @Environment(\.menuPadding) private var padding: MenuDefaults.Padding
-  @Environment(\.menuUnfocusedOpacity) private var unfocusedOpacity :Double
+  @Environment(\.menuUnfocusedOpacity) private var unfocusedOpacity: Double
 
   @Environment(\.controlActiveState) private var controlActiveState
   @Environment(\.colorScheme) private var colorScheme
@@ -92,21 +93,23 @@ struct ZenMenuStyleInternalView: View {
   }
 
   private func shadowOpacity() -> CGFloat {
-    isHovered 
-    ? colorScheme == .dark ? 0.5 : 0.1
-    : 0
+    isHovered
+      ? colorScheme == .dark ? 0.5 : 0.1
+      : 0
   }
 
   private func grayscale() -> CGFloat {
-    grayscaleEffect ? isHovered ? 0
-    : isHovered ? 0.5 : 1
-    : controlActiveState == .key ? 0 : 0.4
+    grayscaleEffect
+      ? isHovered
+        ? 0
+        : isHovered ? 0.5 : 1
+      : controlActiveState == .key ? 0 : 0.4
   }
 
   private func opacity() -> CGFloat {
     isHovered
-    ? 1.0
-    : colorScheme == .light ? 1 : 0.8
+      ? 1.0
+      : colorScheme == .light ? 1 : 0.8
   }
 }
 
@@ -129,7 +132,7 @@ struct ZenMenuStyle_Previews: PreviewProvider {
     GridItem(.flexible()),
     GridItem(.flexible()),
     GridItem(.flexible()),
-    GridItem(.flexible())
+    GridItem(.flexible()),
   ]
 
   static var previews: some View {

@@ -125,41 +125,42 @@ struct ZenButtonStyle: ButtonStyle {
 }
 
 struct ZenButtonStyle_Previews: PreviewProvider {
-  static var colors: [Color] = [
-    Color(.systemRed),
-    Color(.systemOrange),
-    Color(.systemYellow),
-    Color(.systemGreen),
-    Color(.systemBlue),
-    Color(.systemPurple),
-    Color(.systemGray),
-    Color(.systemCyan),
-    Color(.systemMint),
-  ]
+    static var colors: [Color] = [
+        Color(.systemRed),
+        Color(.systemOrange),
+        Color(.systemYellow),
+        Color(.systemGreen),
+        Color(.systemBlue),
+        Color(.systemPurple),
+        Color(.systemGray),
+        Color(.systemCyan),
+        Color(.systemMint),
+    ]
 
-  static var previews: some View {
-    HStack(alignment: .top) {
-      VStack {
-        Button(action: {}, label: {
-          Image(systemName: "person")
-        })
-        Button("Primary", action: {})
-        Button("Positive", action: {})
-        Button("Destructive", action: {})
-      }
+    static var previews: some View {
+        HStack(alignment: .top) {
+            VStack {
+                Button(action: {}, label: {
+                    Image(systemName: "person")
+                })
+                Button("Primary", action: {})
+                Button("Positive", action: {})
+                Button("Destructive", action: {})
+            }
 
-      VStack {
-        ForEach(colors, id: \.self) { color in
-          Button(action: {}, label: { Text("Light button") })
-            .environment(\.colorScheme, .light)
-            .environment(\.buttonBackgroundColor, color)
-          Button(action: {}, label: { Text("Dark button") })
-            .environment(\.colorScheme, .dark)
-            .environment(\.buttonBackgroundColor, color)
+            VStack {
+                ForEach(colors, id: \.self) { color in
+                    Button(action: {}, label: { Text("Light button") })
+                        .environment(\.colorScheme, .light)
+                        .environment(\.buttonBackgroundColor, color)
+                    Button(action: {}, label: { Text("Dark button") })
+                        .environment(\.colorScheme, .dark)
+                        .environment(\.buttonBackgroundColor, color)
+                }
+            }
         }
-      }
+        .style(.derived)
+        .previewLayout(.sizeThatFits)
+        .padding()
     }
-    .previewLayout(.sizeThatFits)
-    .padding()
-  }
 }

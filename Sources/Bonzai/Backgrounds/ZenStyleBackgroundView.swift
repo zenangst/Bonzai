@@ -14,11 +14,8 @@ struct ZenStyleBackgroundView: View {
       .fill(LinearGradient(
         stops: Gradient.Stop.zen(colorScheme, isHovered: isHovered, color: color),
         startPoint: .top, endPoint: .bottom))
+      .glassShims(color)
       .opacity(fillOpacity())
-      .background(
-        BackgroundView(cornerRadius: cornerRadius, calm: calm,
-                       unfocusedOpacity: unfocusedOpacity, isHovered: $isHovered)
-      )
   }
 
   private func fillOpacity() -> CGFloat {
@@ -27,7 +24,18 @@ struct ZenStyleBackgroundView: View {
     }
 
     return isHovered ? 1.0
-                     : colorScheme == .light ? 0.7 : 0.3
+                     : colorScheme == .light ? 0.7 : 0.4
+  }
+}
+
+extension View {
+  func glassShims(_ color: Color) -> some View {
+    if #available(macOS 26.0, *) {
+      return self
+        .glassEffect(.clear.tint(color))
+    } else {
+      return self
+    }
   }
 }
 
